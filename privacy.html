@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;cursor:none;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:4px}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1a1a2e;letter-spacing:-.3px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.nav-right{font-size:13px;color:#aaa}
+.nav-right a{color:#1a73e8;text-decoration:none;margin-left:16px}
+
+/* LAYOUT */
+.legal-wrap{max-width:1060px;margin:0 auto;padding:100px 64px 80px;display:grid;grid-template-columns:220px 1fr;gap:64px;align-items:start}
+
+/* TOC SIDEBAR */
+.toc{position:sticky;top:80px}
+.toc-title{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:14px}
+.toc-link{display:block;font-size:13px;color:#888;text-decoration:none;padding:5px 0;border-left:2px solid transparent;padding-left:12px;transition:all .2s;cursor:none;line-height:1.45}
+.toc-link:hover{color:#1a1a2e;border-left-color:#1a1a2e}
+.toc-link.active{color:#1a73e8;border-left-color:#1a73e8}
+.toc-sep{height:1px;background:rgba(0,0,0,.07);margin:10px 0}
+.toc-contact{margin-top:14px;font-size:12px;color:#aaa;line-height:1.6}
+.toc-contact a{color:#1a73e8;text-decoration:none}
+
+/* CONTENT */
+.legal-content{}
+.last-updated{font-size:12px;color:#aaa;margin-bottom:8px}
+.legal-h1{font-size:clamp(32px,4vw,48px);font-weight:700;letter-spacing:-.03em;color:#1a1a2e;margin-bottom:12px;line-height:1.1}
+.legal-lead{font-size:17px;color:#666;line-height:1.75;max-width:640px;margin-bottom:40px;padding-bottom:36px;border-bottom:1px solid rgba(0,0,0,.07)}
+
+/* SECTIONS */
+.legal-section{margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid rgba(0,0,0,.06)}
+.legal-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.legal-section h2{font-size:20px;font-weight:700;letter-spacing:-.02em;color:#1a1a2e;margin-bottom:14px}
+.legal-section p{font-size:15px;color:#555;line-height:1.8;margin-bottom:12px}
+.legal-section p:last-child{margin-bottom:0}
+.legal-section ul{margin:10px 0 12px 0;padding-left:0;list-style:none}
+.legal-section ul li{font-size:15px;color:#555;line-height:1.75;padding:4px 0;display:flex;align-items:flex-start;gap:10px}
+.legal-section ul li::before{content:'—';color:#bbb;flex-shrink:0;margin-top:1px}
+.legal-section h3{font-size:15px;font-weight:700;color:#1a1a2e;margin:20px 0 8px}
+.info-box{background:#f8f9fe;border:1px solid rgba(26,115,232,.15);border-radius:12px;padding:18px 20px;margin:16px 0}
+.info-box p{font-size:14px;color:#555;margin:0;line-height:1.7}
+.info-box strong{color:#1a1a2e}
+.highlight{background:#fef9e8;border:1px solid rgba(251,188,4,.2);border-radius:12px;padding:16px 20px;margin:16px 0;font-size:14px;color:#555;line-height:1.7}
+
+/* GBAR */
+.gbar-row{display:flex;height:4px}
+.gb{flex:1}.gb:nth-child(1){background:#4285f4}.gb:nth-child(2){background:#ea4335}.gb:nth-child(3){background:#fbbc04}.gb:nth-child(4){background:#34a853}
+
+/* FOOTER */
+footer{background:#fafafa;border-top:1px solid rgba(0,0,0,.06);padding:32px 64px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#aaa}
+footer a{color:#aaa;text-decoration:none;margin-left:24px;transition:color .2s}
+footer a:hover{color:#1a73e8}
+
+@media(max-width:900px){.legal-wrap{grid-template-columns:1fr}.toc{display:none}}
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .legal-wrap{padding:90px 24px 60px}
+  footer{flex-direction:column;gap:12px;padding:24px;text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+<nav>
+  <a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+  <div class="nav-right">Questions? <a href="contact.html">Contact us</a> <a href="terms.html">Terms of Service</a></div>
+</nav>
+
+<div class="legal-wrap">
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <a href="#what-we-collect" class="toc-link active">What we collect</a>
+    <a href="#how-we-use" class="toc-link">How we use it</a>
+    <a href="#sharing" class="toc-link">Who we share it with</a>
+    <a href="#cookies" class="toc-link">Cookies</a>
+    <a href="#payments" class="toc-link">Payments</a>
+    <a href="#your-rights" class="toc-link">Your rights</a>
+    <a href="#children" class="toc-link">Children's privacy</a>
+    <a href="#changes" class="toc-link">Changes to this policy</a>
+    <a href="#contact" class="toc-link">Contact us</a>
+    <div class="toc-sep"></div>
+    <div class="toc-contact">Questions about your data?<br><a href="contact.html">hello@aishiksha.in</a></div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="legal-content">
+    <div class="last-updated">Last updated: March 25, 2025</div>
+    <h1 class="legal-h1">Privacy Policy</h1>
+    <p class="legal-lead">AI Shiksha ("we", "us", "our") is committed to protecting your personal information. This policy explains what data we collect, why we collect it, and how you can control it. We believe in plain language — so we've written this to actually be readable.</p>
+
+    <div class="legal-section" id="what-we-collect">
+      <h2>1. What we collect</h2>
+      <p>We collect information you provide directly, and some information automatically when you use our platform.</p>
+      <h3>Information you give us</h3>
+      <ul>
+        <li>Name and email address when you create an account or contact us</li>
+        <li>Payment information (processed by Razorpay — we never store raw card details)</li>
+        <li>Profile information like your role, experience level, and learning goals</li>
+        <li>Messages you send us via the contact form or email</li>
+        <li>Content you post in community spaces (Discord, Q&A sessions)</li>
+      </ul>
+      <h3>Information collected automatically</h3>
+      <ul>
+        <li>Pages visited, lessons started and completed, papers read</li>
+        <li>Device type, browser, and operating system</li>
+        <li>IP address (stored anonymised after 24 hours)</li>
+        <li>Session duration and navigation patterns (to improve course structure)</li>
+      </ul>
+      <div class="info-box"><p><strong>We do not sell your data.</strong> We do not sell, rent, or trade your personal information to any third party for their marketing purposes, ever.</p></div>
+    </div>
+
+    <div class="legal-section" id="how-we-use">
+      <h2>2. How we use your information</h2>
+      <p>We use your data only to operate and improve AI Shiksha. Specifically:</p>
+      <ul>
+        <li>To create and manage your account and subscription</li>
+        <li>To send you course materials, receipts, and product updates you've opted into</li>
+        <li>To personalise your learning dashboard and course recommendations</li>
+        <li>To respond to your support requests</li>
+        <li>To detect and prevent fraud and abuse</li>
+        <li>To understand how learners use the platform (aggregate, anonymised analytics)</li>
+        <li>To comply with legal obligations (tax records, GST filings)</li>
+      </ul>
+      <p>We will never use your data to train AI models or share it with AI providers without your explicit consent.</p>
+    </div>
+
+    <div class="legal-section" id="sharing">
+      <h2>3. Who we share your information with</h2>
+      <p>We share data only with the services required to run AI Shiksha, and only the minimum necessary:</p>
+      <ul>
+        <li><strong>Razorpay</strong> — payment processing. Subject to Razorpay's privacy policy.</li>
+        <li><strong>Firebase (Google)</strong> — authentication and database hosting. Data stored in Mumbai region (Asia South 1).</li>
+        <li><strong>Resend</strong> — transactional emails (welcome, receipt, password reset).</li>
+        <li><strong>Vercel</strong> — website hosting. No personal data is processed by Vercel beyond standard server logs.</li>
+      </ul>
+      <p>We may disclose your information if required by law, court order, or government authority in India. We will notify you of such requests unless prohibited by law.</p>
+    </div>
+
+    <div class="legal-section" id="cookies">
+      <h2>4. Cookies and tracking</h2>
+      <p>We use a minimal set of cookies required to operate the platform:</p>
+      <ul>
+        <li><strong>Session cookie</strong> — keeps you logged in. Expires when you close your browser or after 30 days.</li>
+        <li><strong>Preference cookie</strong> — remembers your settings (theme, language). Expires after 1 year.</li>
+        <li><strong>Analytics cookie</strong> — anonymised usage data to improve the platform. You can opt out in your account settings.</li>
+      </ul>
+      <p>We do not use advertising cookies, Facebook Pixel, Google Ads tracking, or any third-party marketing trackers.</p>
+    </div>
+
+    <div class="legal-section" id="payments">
+      <h2>5. Payments and billing data</h2>
+      <p>All payments are processed by Razorpay, a PCI DSS Level 1 certified payment gateway. We never store your full card number, CVV, or net banking credentials on our servers.</p>
+      <p>We do store:</p>
+      <ul>
+        <li>Your subscription plan, amount, and billing date</li>
+        <li>Razorpay's payment ID (a reference number, not payment data)</li>
+        <li>Your billing name and email for GST invoices</li>
+      </ul>
+      <p>GST invoices are generated for all Indian subscribers and are available in your dashboard. We retain payment records for 7 years as required by Indian accounting law.</p>
+    </div>
+
+    <div class="legal-section" id="your-rights">
+      <h2>6. Your rights</h2>
+      <p>You have the following rights regarding your personal data:</p>
+      <ul>
+        <li><strong>Access</strong> — request a copy of all data we hold about you</li>
+        <li><strong>Correction</strong> — update incorrect or incomplete information via your dashboard or by emailing us</li>
+        <li><strong>Deletion</strong> — request deletion of your account and associated data</li>
+        <li><strong>Portability</strong> — receive your data in a machine-readable format (JSON or CSV)</li>
+        <li><strong>Objection</strong> — opt out of non-essential communications at any time</li>
+      </ul>
+      <div class="highlight">To exercise any of these rights, email <a href="mailto:hello@aishiksha.in" style="color:#1a73e8">hello@aishiksha.in</a> with the subject "Data Request". We respond within 7 business days.</div>
+      <p>Deleting your account will remove your learning progress, profile, and personal data. Payment records required by law (GST) will be retained for the legally required period in anonymised form.</p>
+    </div>
+
+    <div class="legal-section" id="children">
+      <h2>7. Children's privacy</h2>
+      <p>AI Shiksha is intended for users who are 13 years or older. We do not knowingly collect personal information from children under 13. If you believe a child under 13 has provided us with personal information, please contact us immediately and we will delete it.</p>
+    </div>
+
+    <div class="legal-section" id="changes">
+      <h2>8. Changes to this policy</h2>
+      <p>We may update this Privacy Policy from time to time. When we do, we will update the "Last updated" date at the top and, for significant changes, send an email notification to all registered users at least 14 days before the change takes effect.</p>
+      <p>Your continued use of AI Shiksha after changes are effective constitutes acceptance of the updated policy.</p>
+    </div>
+
+    <div class="legal-section" id="contact">
+      <h2>9. Contact us</h2>
+      <p>If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact us:</p>
+      <div class="info-box">
+        <p><strong>AI Shiksha</strong><br>
+        Email: <a href="mailto:hello@aishiksha.in" style="color:#1a73e8">hello@aishiksha.in</a><br>
+        Subject line: "Privacy — [your query]"<br>
+        Response time: within 7 business days</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gbar-row"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+<footer>
+  <span>© 2025 AI Shiksha · All rights reserved</span>
+  <div>
+    <a href="terms.html">Terms of Service</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html">Home</a>
+  </div>
+</footer>
+
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+/* Highlight active TOC section on scroll */
+const sections=document.querySelectorAll('.legal-section[id]');
+const links=document.querySelectorAll('.toc-link');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const link=document.querySelector('.toc-link[href="#'+e.target.id+'"]');
+      if(link)link.classList.add('active');
+    }
+  });
+},{threshold:.4});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

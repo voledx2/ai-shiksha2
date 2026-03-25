@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#f0f2f5;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.6;cursor:none;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#ddd;border-radius:4px}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+
+/* AUTH GATE */
+.auth-gate{position:fixed;inset:0;background:#1a1a2e;z-index:999;display:flex;align-items:center;justify-content:center}
+.auth-card{background:#fff;border-radius:20px;padding:44px;width:100%;max-width:380px;text-align:center}
+.auth-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px;text-decoration:none;font-size:18px;font-weight:700;color:#1a1a2e}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.auth-badge{display:inline-flex;align-items:center;gap:6px;background:#fef3cd;border:1px solid rgba(251,188,4,.3);color:#b8860b;padding:4px 14px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px}
+.auth-title{font-size:22px;font-weight:700;color:#1a1a2e;margin-bottom:6px}
+.auth-sub{font-size:13px;color:#aaa;margin-bottom:28px}
+.auth-field{margin-bottom:14px;text-align:left}
+.auth-field label{display:block;font-size:12px;font-weight:500;color:#555;margin-bottom:6px}
+.auth-field input{width:100%;padding:12px 14px;border:1.5px solid rgba(0,0,0,.12);border-radius:10px;font-size:14px;font-family:inherit;color:#1a1a2e;outline:none;cursor:none;transition:border-color .2s}
+.auth-field input:focus{border-color:#1a1a2e;box-shadow:0 0 0 3px rgba(26,26,46,.07)}
+.auth-field input::placeholder{color:#bbb}
+.auth-error{font-size:12px;color:#ea4335;margin-top:6px;display:none}
+.auth-btn{width:100%;padding:13px;background:#1a1a2e;color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:500;font-family:inherit;cursor:none;transition:all .2s;margin-top:6px}
+.auth-btn:hover{background:#333;transform:translateY(-1px)}
+.auth-note{font-size:11px;color:#ccc;margin-top:16px}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh;display:none}
+.layout.show{display:grid}
+
+/* SIDEBAR */
+.sidebar{background:#1a1a2e;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.sb-top{padding:20px 20px 0}
+.sb-logo{display:flex;align-items:center;gap:8px;color:#fff;font-size:16px;font-weight:700;text-decoration:none;margin-bottom:4px}
+.sb-role{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:2px 8px;background:rgba(255,255,255,.07);border-radius:4px;display:inline-block;margin-bottom:20px}
+.sb-nav{padding:0 12px;flex:1;overflow-y:auto}
+.sb-sect{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:14px 8px 6px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;text-decoration:none;color:rgba(255,255,255,.55);font-size:13px;transition:all .2s;cursor:none;margin-bottom:2px}
+.sb-link:hover{background:rgba(255,255,255,.07);color:#fff}
+.sb-link.active{background:rgba(255,255,255,.12);color:#fff;font-weight:500}
+.sb-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:#ea4335;color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:100px}
+.sb-foot{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4285f4,#1a73e8);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;flex-shrink:0}
+.sb-uname{font-size:12px;font-weight:600;color:#fff}
+.sb-plan{font-size:10px;color:rgba(255,255,255,.35)}
+.sb-signout{margin-left:auto;font-size:11px;color:rgba(255,255,255,.3);cursor:none;background:none;border:none;font-family:inherit;transition:color .2s}
+.sb-signout:hover{color:rgba(255,255,255,.6)}
+
+/* MAIN */
+.main{overflow-y:auto}
+.topbar{background:#fff;border-bottom:1px solid rgba(0,0,0,.07);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.topbar-title{font-size:16px;font-weight:700;color:#1a1a2e}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.tb-btn{padding:8px 18px;border-radius:50px;font-size:13px;font-weight:500;border:1.5px solid rgba(0,0,0,.12);background:#fff;color:#555;cursor:none;transition:all .2s;font-family:inherit}
+.tb-btn:hover{border-color:#1a1a2e;color:#1a1a2e}
+.tb-btn-dark{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+.tb-btn-dark:hover{background:#333}
+.content{padding:28px 32px}
+
+/* KPI CARDS */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.kpi{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:20px 22px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--ac,#1a73e8)}
+.kpi-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#aaa;margin-bottom:8px}
+.kpi-val{font-size:32px;font-weight:700;letter-spacing:-.03em;color:#1a1a2e;line-height:1}
+.kpi-change{font-size:12px;margin-top:6px}
+.kpi-up{color:#34a853}
+.kpi-down{color:#ea4335}
+.kpi-sub{font-size:11px;color:#bbb;margin-top:2px}
+
+/* SECTION HEADER */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-size:14px;font-weight:700;color:#1a1a2e}
+.sec-action{font-size:12px;color:#1a73e8;text-decoration:none;cursor:none}
+.sec-action:hover{text-decoration:underline}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 340px;gap:20px;margin-bottom:20px}
+
+/* TABLE */
+.table-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden}
+.table-top{padding:16px 20px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:12px}
+.search-input{flex:1;padding:8px 14px;border:1.5px solid rgba(0,0,0,.1);border-radius:8px;font-size:13px;font-family:inherit;color:#1a1a2e;outline:none;cursor:none;max-width:260px;transition:border-color .2s}
+.search-input:focus{border-color:#1a1a2e}
+.filter-select{padding:8px 14px;border:1.5px solid rgba(0,0,0,.1);border-radius:8px;font-size:13px;font-family:inherit;color:#555;outline:none;cursor:none}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#aaa;padding:11px 20px;text-align:left;background:#fafafa;border-bottom:1px solid rgba(0,0,0,.06)}
+td{padding:13px 20px;border-bottom:1px solid rgba(0,0,0,.05);font-size:13px;color:#444;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.user-cell{display:flex;align-items:center;gap:10px}
+.u-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#e8f0fe,#c5d8fd);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.u-name{font-weight:600;color:#1a1a2e;font-size:13px}
+.u-email{font-size:11px;color:#aaa}
+.plan-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 9px;border-radius:5px}
+.pb-learner{background:#e8f0fe;color:#1a73e8}
+.pb-pro{background:#1a1a2e;color:#fff}
+.pb-free{background:#f1f3f4;color:#888}
+.status-dot-g{display:inline-block;width:7px;height:7px;border-radius:50%;background:#34a853;margin-right:5px}
+.status-dot-r{display:inline-block;width:7px;height:7px;border-radius:50%;background:#ea4335;margin-right:5px}
+.action-btn{padding:4px 12px;border-radius:6px;font-size:11px;font-weight:500;border:1.5px solid rgba(0,0,0,.1);background:#fff;cursor:none;font-family:inherit;transition:all .2s;color:#555}
+.action-btn:hover{border-color:#1a1a2e;color:#1a1a2e}
+.action-btn.danger{color:#ea4335;border-color:rgba(234,67,53,.2)}
+.action-btn.danger:hover{background:#ea4335;color:#fff;border-color:#ea4335}
+
+/* REVENUE CHART (CSS bars) */
+.chart-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:20px}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:16px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.bar{width:100%;border-radius:4px 4px 0 0;background:#e8f0fe;position:relative;transition:background .2s;cursor:none;min-height:4px}
+.bar:hover{background:#1a73e8}
+.bar-val{font-size:9px;color:#aaa;text-align:center}
+.bar-label{font-size:10px;color:#aaa;text-align:center}
+
+/* QUICK ACTIONS */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.qa-item{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:none;transition:all .2s;text-decoration:none;color:inherit}
+.qa-item:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
+.qa-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.qa-blue{background:#e8f0fe}
+.qa-green{background:#e8f3ec}
+.qa-yellow{background:#fef9e8}
+.qa-red{background:#fce8e6}
+.qa-title{font-size:13px;font-weight:600;color:#1a1a2e}
+.qa-sub{font-size:11px;color:#aaa}
+
+/* ACTIVITY */
+.activity-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden}
+.al-item{display:flex;align-items:flex-start;gap:12px;padding:13px 18px;border-bottom:1px solid rgba(0,0,0,.05)}
+.al-item:last-child{border-bottom:none}
+.al-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.al-blue{background:#e8f0fe}
+.al-green{background:#e8f3ec}
+.al-yellow{background:#fef9e8}
+.al-red{background:#fce8e6}
+.al-text{font-size:12px;color:#555;flex:1;line-height:1.5}
+.al-text strong{color:#1a1a2e;font-weight:600}
+.al-time{font-size:11px;color:#ccc;white-space:nowrap;margin-top:2px}
+
+@media(max-width:900px){.kpi-row{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}}
+@media(max-width:600px){.kpi-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+
+<!-- AUTH GATE -->
+<div class="auth-gate" id="auth-gate">
+  <div class="auth-card">
+    <a href="index.html" class="auth-logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+    <div class="auth-badge">🔐 Admin access</div>
+    <div class="auth-title">Admin Login</div>
+    <div class="auth-sub">This area is restricted to AI Shiksha administrators only.</div>
+    <div class="auth-field">
+      <label>Admin email</label>
+      <input type="email" id="admin-email" placeholder="admin@aishiksha.in" oninput="clearAuthError()">
+    </div>
+    <div class="auth-field">
+      <label>Admin password</label>
+      <input type="password" id="admin-pwd" placeholder="••••••••" oninput="clearAuthError()" onkeydown="if(event.key==='Enter')adminLogin()">
+      <div class="auth-error" id="auth-error">Incorrect credentials. Please try again.</div>
+    </div>
+    <button class="auth-btn" onclick="adminLogin()">Sign in to Admin →</button>
+    <div class="auth-note">Access is logged. Unauthorised attempts are reported.</div>
+  </div>
+</div>
+
+<!-- ADMIN LAYOUT -->
+<div class="layout" id="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-top">
+      <a href="index.html" class="sb-logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+      <div class="sb-role">Admin panel</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-sect">Overview</div>
+      <a href="#" class="sb-link active" onclick="setPage('dashboard',this)"><span class="sb-icon">📊</span>Dashboard</a>
+      <a href="#" class="sb-link" onclick="setPage('users',this)"><span class="sb-icon">👥</span>Users <span class="sb-badge">3</span></a>
+      <a href="#" class="sb-link" onclick="setPage('payments',this)"><span class="sb-icon">💳</span>Payments</a>
+      <div class="sb-sect">Content</div>
+      <a href="#" class="sb-link" onclick="setPage('courses',this)"><span class="sb-icon">📚</span>Courses</a>
+      <a href="#" class="sb-link" onclick="setPage('papers',this)"><span class="sb-icon">📄</span>White Papers</a>
+      <div class="sb-sect">System</div>
+      <a href="#" class="sb-link"><span class="sb-icon">📬</span>Email Logs</a>
+      <a href="#" class="sb-link"><span class="sb-icon">⚙️</span>Settings</a>
+      <a href="index.html" class="sb-link"><span class="sb-icon">🌐</span>View Site</a>
+    </nav>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-avatar">👤</div>
+        <div><div class="sb-uname">Admin</div><div class="sb-plan">aishiksha.in</div></div>
+        <button class="sb-signout" onclick="signOut()">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-right">
+        <button class="tb-btn" onclick="exportData()">⬇ Export CSV</button>
+        <button class="tb-btn tb-btn-dark" onclick="inviteUser()">+ Invite User</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- KPI -->
+      <div class="kpi-row">
+        <div class="kpi" style="--ac:#1a73e8">
+          <div class="kpi-label">Total Subscribers</div>
+          <div class="kpi-val">4,831</div>
+          <div class="kpi-change kpi-up">↑ 127 this month</div>
+        </div>
+        <div class="kpi" style="--ac:#34a853">
+          <div class="kpi-label">MRR</div>
+          <div class="kpi-val">₹5.6L</div>
+          <div class="kpi-change kpi-up">↑ 18% vs last month</div>
+        </div>
+        <div class="kpi" style="--ac:#fbbc04">
+          <div class="kpi-label">Pro Subscribers</div>
+          <div class="kpi-val">842</div>
+          <div class="kpi-change kpi-up">↑ 34 this month</div>
+          <div class="kpi-sub">17.4% of total</div>
+        </div>
+        <div class="kpi" style="--ac:#ea4335">
+          <div class="kpi-label">Churn Rate</div>
+          <div class="kpi-val">2.1%</div>
+          <div class="kpi-change kpi-up">↓ 0.3% vs last month</div>
+        </div>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="sec-head"><div class="sec-title">Quick actions</div></div>
+      <div class="quick-grid" style="margin-bottom:24px">
+        <a href="#" class="qa-item" onclick="showUserModal()"><div class="qa-icon qa-blue">➕</div><div><div class="qa-title">Add user manually</div><div class="qa-sub">Grant access without payment</div></div></a>
+        <a href="#" class="qa-item"><div class="qa-icon qa-green">📬</div><div><div class="qa-title">Send announcement</div><div class="qa-sub">Email all subscribers</div></div></a>
+        <a href="#" class="qa-item"><div class="qa-icon qa-yellow">🔑</div><div><div class="qa-title">Reset a password</div><div class="qa-sub">Send reset link manually</div></div></a>
+        <a href="#" class="qa-item"><div class="qa-icon qa-red">🚫</div><div><div class="qa-title">Revoke access</div><div class="qa-sub">Suspend a user account</div></div></a>
+      </div>
+
+      <div class="two-col">
+        <!-- USERS TABLE -->
+        <div>
+          <div class="sec-head">
+            <div class="sec-title">Recent subscribers</div>
+            <a href="#" class="sec-action" onclick="setPage('users',null)">View all →</a>
+          </div>
+          <div class="table-card">
+            <div class="table-top">
+              <input class="search-input" type="text" placeholder="Search users…" oninput="filterUsers(this.value)">
+              <select class="filter-select" onchange="filterPlan(this.value)">
+                <option value="all">All plans</option>
+                <option value="learner">Learner</option>
+                <option value="pro">Pro</option>
+                <option value="free">Free</option>
+              </select>
+            </div>
+            <table id="user-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Plan</th>
+                  <th>Joined</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="user-tbody">
+                <tr>
+                  <td><div class="user-cell"><div class="u-avatar">🧑</div><div><div class="u-name">Rahul Kumar</div><div class="u-email">rahul@example.com</div></div></div></td>
+                  <td><span class="plan-badge pb-pro">Pro</span></td>
+                  <td>Mar 20, 2025</td>
+                  <td><span class="status-dot-g"></span>Active</td>
+                  <td><button class="action-btn">Edit</button> <button class="action-btn danger">Revoke</button></td>
+                </tr>
+                <tr>
+                  <td><div class="user-cell"><div class="u-avatar">👩</div><div><div class="u-name">Sneha Reddy</div><div class="u-email">sneha@techco.in</div></div></div></td>
+                  <td><span class="plan-badge pb-learner">Learner</span></td>
+                  <td>Mar 18, 2025</td>
+                  <td><span class="status-dot-g"></span>Active</td>
+                  <td><button class="action-btn">Edit</button> <button class="action-btn danger">Revoke</button></td>
+                </tr>
+                <tr>
+                  <td><div class="user-cell"><div class="u-avatar">🧑‍💻</div><div><div class="u-name">Aryan Singh</div><div class="u-email">aryan@iitb.ac.in</div></div></div></td>
+                  <td><span class="plan-badge pb-learner">Learner</span></td>
+                  <td>Mar 15, 2025</td>
+                  <td><span class="status-dot-g"></span>Active</td>
+                  <td><button class="action-btn">Edit</button> <button class="action-btn danger">Revoke</button></td>
+                </tr>
+                <tr>
+                  <td><div class="user-cell"><div class="u-avatar">👨</div><div><div class="u-name">Deepak Nair</div><div class="u-email">deepak@startup.io</div></div></div></td>
+                  <td><span class="plan-badge pb-free">Free</span></td>
+                  <td>Mar 12, 2025</td>
+                  <td><span class="status-dot-r"></span>Unverified</td>
+                  <td><button class="action-btn">Verify</button> <button class="action-btn">Upgrade</button></td>
+                </tr>
+                <tr>
+                  <td><div class="user-cell"><div class="u-avatar">👩‍💻</div><div><div class="u-name">Priya Sharma</div><div class="u-email">priya@analytics.com</div></div></div></td>
+                  <td><span class="plan-badge pb-pro">Pro</span></td>
+                  <td>Mar 10, 2025</td>
+                  <td><span class="status-dot-g"></span>Active</td>
+                  <td><button class="action-btn">Edit</button> <button class="action-btn danger">Revoke</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+          <!-- REVENUE CHART -->
+          <div class="sec-head"><div class="sec-title">Revenue (last 7 days)</div></div>
+          <div class="chart-card" style="margin-bottom:16px">
+            <div style="font-size:22px;font-weight:700;letter-spacing:-.02em;color:#1a1a2e">₹1,28,340</div>
+            <div style="font-size:12px;color:#34a853;margin-top:2px">↑ 12% vs previous week</div>
+            <div class="chart-bars" id="chart"></div>
+          </div>
+
+          <!-- ACTIVITY -->
+          <div class="sec-head"><div class="sec-title">Live activity</div></div>
+          <div class="activity-card">
+            <div class="al-item"><div class="al-dot al-green">💳</div><div class="al-text"><strong>Priya M.</strong> subscribed to Pro plan</div><div class="al-time">2m ago</div></div>
+            <div class="al-item"><div class="al-dot al-blue">👤</div><div class="al-text"><strong>Ravi K.</strong> created a free account</div><div class="al-time">8m ago</div></div>
+            <div class="al-item"><div class="al-dot al-yellow">📬</div><div class="al-text">Welcome email sent to <strong>ananya@gmail.com</strong></div><div class="al-time">14m ago</div></div>
+            <div class="al-item"><div class="al-dot al-green">💳</div><div class="al-text"><strong>Suresh B.</strong> upgraded Learner → Pro</div><div class="al-time">31m ago</div></div>
+            <div class="al-item"><div class="al-dot al-red">❌</div><div class="al-text"><strong>3 payment retries</strong> failed for Vikram P.</div><div class="al-time">1h ago</div></div>
+            <div class="al-item"><div class="al-dot al-blue">👤</div><div class="al-text"><strong>Neha S.</strong> reset her password</div><div class="al-time">2h ago</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button,input,select').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+/* AUTH */
+function adminLogin(){
+  const email=document.getElementById('admin-email').value;
+  const pwd=document.getElementById('admin-pwd').value;
+  /* In production: verify against Firebase Auth with admin custom claim */
+  if(email==='admin@aishiksha.in'&&pwd==='admin123'){
+    document.getElementById('auth-gate').style.display='none';
+    document.getElementById('admin-layout').classList.add('show');
+    buildChart();
+  } else {
+    document.getElementById('auth-error').style.display='block';
+  }
+}
+function clearAuthError(){document.getElementById('auth-error').style.display='none';}
+function signOut(){document.getElementById('auth-gate').style.display='flex';document.getElementById('admin-layout').classList.remove('show');}
+
+/* NAV */
+function setPage(id,btn){
+  if(btn){document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));btn.classList.add('active');}
+  const titles={dashboard:'Dashboard',users:'All Users',payments:'Payments',courses:'Courses',papers:'White Papers'};
+  document.getElementById('page-title').textContent=titles[id]||'Dashboard';
+}
+
+/* Revenue chart */
+function buildChart(){
+  const vals=[18200,21400,16800,24300,19600,28100,21940];
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const max=Math.max(...vals);
+  const wrap=document.getElementById('chart');
+  wrap.innerHTML='';
+  vals.forEach((v,i)=>{
+    const pct=Math.round((v/max)*100);
+    const d=document.createElement('div');
+    d.className='bar-wrap';
+    d.innerHTML=`<div class="bar-val">₹${(v/1000).toFixed(0)}k</div><div class="bar" style="height:${pct}%" title="₹${v.toLocaleString('en-IN')}"></div><div class="bar-label">${days[i]}</div>`;
+    wrap.appendChild(d);
+  });
+}
+
+/* Search */
+function filterUsers(q){
+  document.querySelectorAll('#user-tbody tr').forEach(row=>{
+    row.style.display=row.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';
+  });
+}
+function filterPlan(plan){
+  document.querySelectorAll('#user-tbody tr').forEach(row=>{
+    const badge=row.querySelector('.plan-badge');
+    if(!badge)return;
+    row.style.display=(plan==='all'||badge.textContent.toLowerCase()===plan)?'':'none';
+  });
+}
+
+/* Stubs */
+function exportData(){alert('CSV export would download all subscriber data. Connect to Firebase/Supabase to implement.');}
+function inviteUser(){const e=prompt('Enter user email to invite:');if(e)alert(`Invite sent to ${e}! In production this triggers a welcome email via Resend.`);}
+function showUserModal(){alert('Add user modal — connect Firebase Auth to create users programmatically.');}
+
+window.adminLogin=adminLogin;window.clearAuthError=clearAuthError;window.signOut=signOut;
+window.setPage=setPage;window.filterUsers=filterUsers;window.filterPlan=filterPlan;
+window.exportData=exportData;window.inviteUser=inviteUser;window.showUserModal=showUserModal;
+</script>
+</body>
+</html>

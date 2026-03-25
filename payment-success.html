@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Successful — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;cursor:none;min-height:100vh;display:flex;flex-direction:column}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+
+/* NAV */
+.top-nav{height:64px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1a1a2e;letter-spacing:-.3px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+
+/* MAIN */
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px 24px}
+.success-card{max-width:640px;width:100%;text-align:center}
+
+/* ANIMATED CHECKMARK */
+.check-wrap{width:96px;height:96px;margin:0 auto 32px;position:relative}
+.check-circle{width:96px;height:96px;border-radius:50%;background:#e8f3ec;display:flex;align-items:center;justify-content:center;animation:scaleIn .5s cubic-bezier(.34,1.56,.64,1) forwards}
+.check-circle svg{width:44px;height:44px;stroke:#34a853;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.check-path{stroke-dasharray:60;stroke-dashoffset:60;animation:drawCheck .4s ease .35s forwards}
+@keyframes scaleIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes drawCheck{to{stroke-dashoffset:0}}
+
+/* CONFETTI (pure CSS) */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.c{position:absolute;width:8px;height:8px;border-radius:2px;opacity:0;animation:fall var(--d,2.5s) ease var(--delay,0s) forwards}
+@keyframes fall{0%{opacity:1;transform:translateY(-20px) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+
+.badge-new{display:inline-flex;align-items:center;gap:6px;background:#e8f3ec;border:1px solid rgba(52,168,83,.2);color:#34a853;padding:6px 18px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:20px;animation:up .6s ease .2s both}
+.success-h1{font-size:clamp(32px,5vw,52px);font-weight:700;letter-spacing:-.035em;line-height:1.1;color:#1a1a2e;margin-bottom:16px;animation:up .6s ease .3s both}
+.success-p{font-size:16px;color:#666;line-height:1.75;max-width:480px;margin:0 auto 36px;animation:up .6s ease .4s both}
+
+/* EMAIL BOX */
+.email-box{background:#f8f9fe;border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:24px;margin-bottom:32px;text-align:left;animation:up .6s ease .45s both}
+.eb-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.eb-icon{width:36px;height:36px;border-radius:10px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.eb-title{font-size:15px;font-weight:700;color:#1a1a2e}
+.eb-sub{font-size:12px;color:#aaa}
+.eb-steps{list-style:none}
+.eb-steps li{font-size:14px;color:#555;padding:7px 0;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid rgba(0,0,0,.05)}
+.eb-steps li:last-child{border-bottom:none}
+.eb-num{width:20px;height:20px;border-radius:50%;background:#1a1a2e;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+
+/* ORDER REF */
+.order-ref{background:#fafafa;border:1px solid rgba(0,0,0,.07);border-radius:12px;padding:16px 20px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;animation:up .6s ease .5s both}
+.or-label{font-size:12px;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.or-val{font-size:14px;font-weight:700;color:#1a1a2e;font-family:monospace}
+.or-status{display:flex;align-items:center;gap:6px;font-size:13px;color:#34a853;font-weight:500}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#34a853;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:up .6s ease .55s both}
+.btn-dark{background:#1a1a2e;color:#fff;padding:15px 36px;border-radius:50px;font-size:15px;font-weight:600;text-decoration:none;transition:all .25s;cursor:none;display:inline-block}
+.btn-dark:hover{background:#0d0d1a;transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.2)}
+.btn-out{background:transparent;color:#1a1a2e;padding:14px 36px;border-radius:50px;font-size:15px;font-weight:500;text-decoration:none;border:1.5px solid rgba(0,0,0,.14);transition:all .25s;cursor:none;display:inline-block}
+.btn-out:hover{border-color:#1a1a2e}
+
+/* WHAT'S NEXT */
+.next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px;text-align:left;animation:up .6s ease .6s both}
+.next-card{border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:20px}
+.nc-icon{font-size:22px;margin-bottom:10px}
+.nc-title{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.nc-desc{font-size:12px;color:#aaa;line-height:1.6}
+
+/* GBAR */
+.gbar-row{display:flex;height:4px}
+.gb{flex:1}.gb:nth-child(1){background:#4285f4}.gb:nth-child(2){background:#ea4335}.gb:nth-child(3){background:#fbbc04}.gb:nth-child(4){background:#34a853}
+
+/* FOOTER */
+footer{background:#fafafa;border-top:1px solid rgba(0,0,0,.06);padding:24px 52px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#aaa}
+footer a{color:#aaa;text-decoration:none;margin-left:20px}
+footer a:hover{color:#1a73e8}
+
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){
+  .top-nav{padding:0 20px}
+  .next-grid{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:10px;padding:20px;text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+
+<!-- CONFETTI -->
+<div class="confetti-wrap" id="confetti"></div>
+
+<!-- NAV -->
+<div class="top-nav">
+  <a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+  <span style="font-size:13px;color:#aaa">Need help? <a href="contact.html" style="color:#1a73e8;text-decoration:none">Contact us</a></span>
+</div>
+
+<div class="main">
+  <div class="success-card">
+    <!-- CHECKMARK -->
+    <div class="check-wrap">
+      <div class="check-circle">
+        <svg viewBox="0 0 44 44"><path class="check-path" d="M10 22l9 9 15-18"/></svg>
+      </div>
+    </div>
+
+    <div class="badge-new">✓ Payment confirmed</div>
+    <h1 class="success-h1">Aap ready hain!<br>Shuru karte hain.</h1>
+    <p class="success-p">Your Learner subscription is now active. Check your email for your login credentials — we've sent everything you need to get started.</p>
+
+    <!-- ORDER REF -->
+    <div class="order-ref">
+      <div>
+        <div class="or-label">Order reference</div>
+        <div class="or-val" id="order-ref">AIS-2025-07842</div>
+      </div>
+      <div class="or-status"><div class="status-dot"></div>Payment successful</div>
+    </div>
+
+    <!-- EMAIL BOX -->
+    <div class="email-box">
+      <div class="eb-head">
+        <div class="eb-icon">📬</div>
+        <div>
+          <div class="eb-title">Check your inbox</div>
+          <div class="eb-sub">Email sent to rahul@example.com</div>
+        </div>
+      </div>
+      <ul class="eb-steps">
+        <li><div class="eb-num">1</div><span>Welcome email with your login link — arrives within 2 minutes</span></li>
+        <li><div class="eb-num">2</div><span>Click the link to set your password and activate your account</span></li>
+        <li><div class="eb-num">3</div><span>Log in and go straight to the Foundation Track — your first lesson is waiting</span></li>
+      </ul>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="btn-row">
+      <a href="dashboard.html" class="btn-dark">Go to Dashboard →</a>
+      <a href="courses.html" class="btn-out">Browse Courses</a>
+    </div>
+
+    <!-- WHAT'S NEXT -->
+    <div class="next-grid">
+      <div class="next-card">
+        <div class="nc-icon">🧠</div>
+        <div class="nc-title">Start with Foundation</div>
+        <div class="nc-desc">Begin with "How LLMs Actually Work" — free, 8 lessons, the perfect entry point.</div>
+      </div>
+      <div class="next-card">
+        <div class="nc-icon">💬</div>
+        <div class="nc-title">Join Discord</div>
+        <div class="nc-desc">4,800+ engineers discussing papers, sharing code, helping each other go deep.</div>
+      </div>
+      <div class="next-card">
+        <div class="nc-icon">📅</div>
+        <div class="nc-title">Live Q&amp;A this month</div>
+        <div class="nc-desc">Next session: April 5th, 8pm IST. Your invite link is in the welcome email.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gbar-row"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+<footer>
+  <span>© 2025 AI Shiksha · All rights reserved</span>
+  <div>
+    <a href="contact.html">Support</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+  </div>
+</footer>
+
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+/* Generate confetti */
+const colors=['#4285f4','#ea4335','#fbbc04','#34a853','#1a73e8','#9c27b0'];
+const wrap=document.getElementById('confetti');
+for(let i=0;i<60;i++){
+  const d=document.createElement('div');
+  d.className='c';
+  d.style.cssText=`left:${Math.random()*100}%;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};--d:${2+Math.random()*3}s;--delay:${Math.random()*1.5}s;transform:rotate(${Math.random()*360}deg);width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'}`;
+  wrap.appendChild(d);
+}
+
+/* Generate order ref */
+const ref='AIS-2025-'+Math.floor(10000+Math.random()*90000);
+document.getElementById('order-ref').textContent=ref;
+
+/* Check URL params for Razorpay payment ID */
+const params=new URLSearchParams(window.location.search);
+if(params.get('ref'))document.getElementById('order-ref').textContent='RPY-'+params.get('ref').slice(0,12).toUpperCase();
+</script>
+</body>
+</html>

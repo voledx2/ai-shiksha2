@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Glossary — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;cursor:none;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:4px}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1a1a2e;letter-spacing:-.3px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{font-size:14px;color:#555;text-decoration:none;font-weight:400;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:#1a1a2e}
+.nav-cta{background:#1a1a2e!important;color:#fff!important;padding:9px 22px!important;border-radius:24px;font-weight:500!important}
+.nav-cta:hover{background:#333!important}
+/* HERO */
+.page-hero{padding:120px 64px 48px;max-width:1200px;margin:0 auto}
+.kicker{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#1a73e8;margin-bottom:16px}
+.page-hero h1{font-size:clamp(36px,5vw,60px);font-weight:700;letter-spacing:-.04em;color:#1a1a2e;margin-bottom:16px}
+.page-hero p{font-size:17px;color:#666;max-width:560px;line-height:1.7}
+/* SEARCH */
+.search-bar{max-width:1200px;margin:0 auto;padding:0 64px 32px;position:relative}
+.search-bar input{width:100%;max-width:560px;padding:13px 20px 13px 48px;border:1.5px solid rgba(0,0,0,.12);border-radius:100px;font-size:15px;font-family:inherit;color:#1a1a2e;background:#fafafa;outline:none;cursor:none;transition:all .2s}
+.search-bar input:focus{border-color:#1a1a2e;background:#fff;box-shadow:0 0 0 3px rgba(26,26,46,.06)}
+.s-icon{position:absolute;left:80px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.4}
+/* ALPHA NAV */
+.alpha-nav{max-width:1200px;margin:0 auto;padding:0 64px 24px;display:flex;flex-wrap:wrap;gap:6px}
+.alpha-btn{width:34px;height:34px;border-radius:8px;border:1.5px solid rgba(0,0,0,.1);background:#fff;color:#666;font-size:13px;font-weight:600;cursor:none;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.alpha-btn:hover,.alpha-btn.has-terms{background:#f1f3f4;color:#1a1a2e}
+.alpha-btn.active{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+/* GLOSSARY BODY */
+.glossary-wrap{max-width:1200px;margin:0 auto;padding:0 64px 100px;display:grid;grid-template-columns:1fr 280px;gap:64px;align-items:start}
+.gl-main{}
+.letter-group{margin-bottom:40px}
+.letter-heading{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#1a73e8;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e8f0fe}
+.term-item{padding:20px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.term-item:last-child{border-bottom:none}
+.term-name{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:6px;display:flex;align-items:center;gap:12px}
+.term-tag{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 9px;border-radius:5px}
+.tag-arch{background:#e8f0fe;color:#1a73e8}
+.tag-rag{background:#fce8e6;color:#ea4335}
+.tag-train{background:#e8f3ec;color:#34a853}
+.tag-agent{background:#fef9e8;color:#b8860b}
+.tag-safety{background:#f3e8fd;color:#9c27b0}
+.term-def{font-size:14px;color:#555;line-height:1.75}
+.term-note{font-size:13px;color:#888;line-height:1.65;margin-top:8px;padding:10px 14px;background:#fafafa;border-radius:8px;border-left:3px solid rgba(0,0,0,.08)}
+.term-link{font-size:12px;color:#1a73e8;text-decoration:none;margin-top:8px;display:inline-block}
+.term-link:hover{text-decoration:underline}
+/* SIDEBAR */
+.gl-sidebar{position:sticky;top:80px}
+.gs-card{border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:24px;margin-bottom:20px}
+.gs-card h4{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:12px}
+.gs-card p{font-size:13px;color:#666;line-height:1.65}
+.gs-card a{display:block;background:#1a1a2e;color:#fff;padding:11px 20px;border-radius:50px;font-size:13px;font-weight:500;text-align:center;text-decoration:none;margin-top:16px;cursor:none;transition:background .2s}
+.gs-card a:hover{background:#333}
+/* FOOTER */
+footer{background:#fff;border-top:1px solid rgba(0,0,0,.07);padding:60px 64px 32px}
+.gbar-row{display:flex;height:4px;margin-bottom:52px}
+.gb{flex:1}.gb:nth-child(1){background:#4285f4}.gb:nth-child(2){background:#ea4335}.gb:nth-child(3){background:#fbbc04}.gb:nth-child(4){background:#34a853}
+.fg{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.fb p{font-size:13px;color:#999;line-height:1.7;margin-top:12px;max-width:240px}
+.fc h5{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:16px}
+.fc ul{list-style:none}.fc ul li{margin-bottom:9px}
+.fc ul a{font-size:13px;color:#777;text-decoration:none;transition:color .2s}
+.fc ul a:hover{color:#1a73e8}
+.fbot{display:flex;justify-content:space-between;border-top:1px solid rgba(0,0,0,.07);padding-top:22px;font-size:12px;color:#ccc}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.rv.sh{opacity:1;transform:none}
+@media(max-width:900px){.glossary-wrap{grid-template-columns:1fr}.gl-sidebar{position:static}}
+@media(max-width:768px){
+  nav{padding:0 20px}.nav-links{display:none}
+  .page-hero,.search-bar,.alpha-nav,.glossary-wrap{padding-left:24px;padding-right:24px}
+  .s-icon{left:40px}
+  .fg{grid-template-columns:1fr 1fr}
+  footer{padding:40px 24px 24px}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+<nav>
+  <a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+  <ul class="nav-links">
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="whitepapers.html">White Papers</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="login.html">Sign in</a></li>
+    <li><a href="signup.html" class="nav-cta">Shuru Karo</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero rv">
+  <div class="kicker">Reference · 180+ Terms</div>
+  <h1>AI Glossary</h1>
+  <p>Every term you'll encounter in LLMs, RAG, agents, and alignment — explained with precision and the context missing from Wikipedia.</p>
+</div>
+
+<div class="search-bar">
+  <span class="s-icon">🔍</span>
+  <input type="text" id="search" placeholder="Search terms… e.g. attention, LoRA, perplexity" oninput="filterTerms()">
+</div>
+
+<div class="alpha-nav" id="alpha-nav"></div>
+
+<div class="glossary-wrap">
+  <div class="gl-main" id="gl-main">
+
+    <div class="letter-group" data-letter="A">
+      <div class="letter-heading">A</div>
+      <div class="term-item" data-term="attention mechanism">
+        <div class="term-name">Attention Mechanism <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A function that computes a weighted sum of values (V) based on the compatibility between queries (Q) and keys (K). In transformers, attention allows each token to "attend to" every other token in the sequence. Scaled dot-product attention computes scores as QKᵀ/√d_k, applies softmax, then multiplies by V.</p>
+        <div class="term-note">💡 The division by √d_k prevents the dot products from growing large in high dimensions, which would push softmax into saturation and cause vanishing gradients.</div>
+        <a href="course-detail.html" class="term-link">→ See: Attention Mechanisms course</a>
+      </div>
+      <div class="term-item" data-term="autoregressive model generation">
+        <div class="term-name">Autoregressive Model <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A model that generates sequences one token at a time, with each new token conditioned on all previously generated tokens. GPT-style LLMs are autoregressive — they predict P(xₜ | x₁, x₂, ..., xₜ₋₁) at each step using a causal (masked) attention mechanism.</p>
+      </div>
+      <div class="term-item" data-term="alignment ai values human">
+        <div class="term-name">Alignment <span class="term-tag tag-safety">Safety</span></div>
+        <p class="term-def">The problem of ensuring that AI systems behave in ways that reflect human intentions and values. Technical alignment approaches include RLHF, DPO, Constitutional AI, and interpretability research. Distinguished from "capability" — a highly capable but misaligned model can be dangerous.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="B">
+      <div class="letter-heading">B</div>
+      <div class="term-item" data-term="bpe byte pair encoding tokenization">
+        <div class="term-name">BPE (Byte Pair Encoding) <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A subword tokenization algorithm that iteratively merges the most frequent byte pairs in a corpus. Starting from individual characters (or bytes), BPE builds a vocabulary of variable-length subwords. Most modern LLMs (GPT, LLaMA, Mistral) use BPE or a variant.</p>
+        <div class="term-note">💡 BPE balances vocabulary size against sequence length. A smaller vocabulary means longer sequences; a larger vocabulary handles rare words better but increases embedding table size.</div>
+      </div>
+      <div class="term-item" data-term="bm25 sparse retrieval search">
+        <div class="term-name">BM25 <span class="term-tag tag-rag">RAG</span></div>
+        <p class="term-def">Best Match 25 — a classical sparse retrieval algorithm based on TF-IDF with length normalization. BM25 scores documents by term frequency, inverse document frequency, and document length penalty. Despite its simplicity, it remains competitive in hybrid retrieval setups when combined with dense vector search.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="C">
+      <div class="letter-heading">C</div>
+      <div class="term-item" data-term="constitutional ai cai rlaif">
+        <div class="term-name">Constitutional AI (CAI) <span class="term-tag tag-safety">Safety</span></div>
+        <p class="term-def">Anthropic's method of training AI systems to be harmless using AI feedback (RLAIF) rather than human feedback. A set of principles (the "constitution") guides the AI to critique and revise its own outputs, replacing human labelers in the RLHF loop for harmlessness training.</p>
+        <a href="whitepapers.html" class="term-link">→ See: Constitutional AI paper annotation</a>
+      </div>
+      <div class="term-item" data-term="chunking rag retrieval splitting">
+        <div class="term-name">Chunking <span class="term-tag tag-rag">RAG</span></div>
+        <p class="term-def">The process of splitting documents into smaller segments for storage in a vector database. Chunking strategy significantly affects RAG quality. Fixed-size chunking splits by token count; semantic chunking splits on meaning boundaries; recursive chunking uses hierarchy (sections → paragraphs → sentences).</p>
+      </div>
+      <div class="term-item" data-term="context window length tokens">
+        <div class="term-name">Context Window <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">The maximum number of tokens an LLM can process in a single forward pass — both input (prompt) and output (completion) combined. Modern models range from 4k (early GPT-4) to 1M+ tokens (Gemini 1.5 Pro). Longer contexts require techniques like GQA, sliding window attention, and specialized positional encodings.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="D">
+      <div class="letter-heading">D</div>
+      <div class="term-item" data-term="dpo direct preference optimization alignment">
+        <div class="term-name">DPO (Direct Preference Optimization) <span class="term-tag tag-train">Training</span></div>
+        <p class="term-def">A fine-tuning algorithm that aligns LLMs to human preferences without training a separate reward model. DPO reformulates the RLHF objective to directly optimize the policy using preference pairs (chosen vs rejected responses), showing that the language model itself is implicitly a reward model.</p>
+        <a href="whitepapers.html" class="term-link">→ See: DPO paper annotation</a>
+      </div>
+      <div class="term-item" data-term="dense retrieval passage embedding similarity">
+        <div class="term-name">Dense Retrieval <span class="term-tag tag-rag">RAG</span></div>
+        <p class="term-def">Retrieval using dense vector representations (embeddings) rather than sparse keyword matching. A bi-encoder encodes queries and passages separately; retrieval finds nearest neighbors in embedding space using approximate nearest neighbor (ANN) search. Contrasted with sparse retrieval (BM25) and late-interaction (ColBERT).</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="E">
+      <div class="letter-heading">E</div>
+      <div class="term-item" data-term="embedding vector representation semantic">
+        <div class="term-name">Embedding <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A dense vector representation of text (token, sentence, or document) in a continuous high-dimensional space. Semantically similar texts have embeddings that are close in this space (measured by cosine similarity or dot product). Embeddings are the fundamental representation used in both transformers and retrieval systems.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="F">
+      <div class="letter-heading">F</div>
+      <div class="term-item" data-term="fine-tuning supervised finetuning sft adaptation">
+        <div class="term-name">Fine-Tuning <span class="term-tag tag-train">Training</span></div>
+        <p class="term-def">Updating a pre-trained model's weights on a smaller, task-specific dataset. Supervised Fine-Tuning (SFT) uses labeled examples; RLHF fine-tunes with human preference data. Full fine-tuning updates all parameters; parameter-efficient methods (LoRA, adapters) update only a small subset.</p>
+      </div>
+      <div class="term-item" data-term="function calling tool use llm api">
+        <div class="term-name">Function Calling <span class="term-tag tag-agent">Agents</span></div>
+        <p class="term-def">A capability where LLMs can generate structured output (JSON) describing a tool to call with specific arguments, rather than generating prose. The application executes the function and passes results back to the model. The foundation of tool-using agents and the MCP protocol.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="G">
+      <div class="letter-heading">G</div>
+      <div class="term-item" data-term="gqa grouped query attention kv cache">
+        <div class="term-name">GQA (Grouped-Query Attention) <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">An attention variant where multiple query heads share a single key-value head. Reduces KV cache memory by a factor equal to the number of query groups, enabling larger batch sizes or longer contexts without proportional memory cost. Used in LLaMA 2 70B, Mistral, and most modern large models.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="H">
+      <div class="letter-heading">H</div>
+      <div class="term-item" data-term="hnsw approximate nearest neighbor index vector">
+        <div class="term-name">HNSW (Hierarchical Navigable Small World) <span class="term-tag tag-rag">RAG</span></div>
+        <p class="term-def">A graph-based approximate nearest neighbor (ANN) index used in vector databases. HNSW builds a layered graph where each node connects to its nearest neighbors at multiple scales. Offers excellent recall-speed trade-offs and is used by Pinecone, Weaviate, Qdrant, and most production vector stores.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="K">
+      <div class="letter-heading">K</div>
+      <div class="term-item" data-term="kv cache key value inference memory">
+        <div class="term-name">KV Cache <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">During autoregressive inference, keys and values for all previous tokens are cached to avoid recomputation at each generation step. Without KV caching, inference time is O(n²) in sequence length; with caching, it's O(n) per step. KV cache size is the primary memory bottleneck in production serving.</p>
+      </div>
+      <div class="term-item" data-term="kl divergence reinforcement learning rlhf constraint">
+        <div class="term-name">KL Divergence <span class="term-tag tag-train">Training</span></div>
+        <p class="term-def">Kullback-Leibler divergence — a measure of how one probability distribution differs from another. In RLHF, a KL penalty term constrains the fine-tuned model from deviating too far from the reference (pre-trained) model, preventing reward hacking and maintaining language fluency.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="L">
+      <div class="letter-heading">L</div>
+      <div class="term-item" data-term="lora low rank adaptation fine-tuning peft">
+        <div class="term-name">LoRA (Low-Rank Adaptation) <span class="term-tag tag-train">Training</span></div>
+        <p class="term-def">A parameter-efficient fine-tuning method that inserts trainable low-rank matrices (ΔW = AB) into pre-trained weight matrices while keeping original weights frozen. If a matrix W ∈ ℝᵐˣⁿ, LoRA approximates the update with A ∈ ℝᵐˣʳ and B ∈ ℝʳˣⁿ where r ≪ min(m,n). Dramatically reduces trainable parameters (typically 0.1–1% of total).</p>
+      </div>
+      <div class="term-item" data-term="llm large language model">
+        <div class="term-name">LLM (Large Language Model) <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A neural language model with billions of parameters, pre-trained on large text corpora using next-token prediction. Modern LLMs are transformer-based and exhibit emergent capabilities (instruction following, in-context learning, reasoning) not explicitly trained for.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="M">
+      <div class="letter-heading">M</div>
+      <div class="term-item" data-term="mcp model context protocol agents tools">
+        <div class="term-name">MCP (Model Context Protocol) <span class="term-tag tag-agent">Agents</span></div>
+        <p class="term-def">Anthropic's open protocol for connecting LLMs to external tools, data sources, and services. MCP defines a standardized client-server architecture where MCP servers expose tools (functions), resources (data), and prompt templates, while MCP clients (LLM applications) query them at runtime.</p>
+        <a href="whitepapers.html" class="term-link">→ See: MCP Specification paper annotation</a>
+      </div>
+      <div class="term-item" data-term="mixture of experts moe sparse routing">
+        <div class="term-name">Mixture of Experts (MoE) <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">An architecture where each transformer layer contains multiple "expert" feed-forward networks, and a learned router selects a sparse subset (typically top-2) of experts for each token. MoE scales model parameters without proportionally increasing FLOP cost — Mixtral 8x7B activates ~13B parameters per token despite having ~47B total.</p>
+      </div>
+      <div class="term-item" data-term="multi-head attention heads parallel">
+        <div class="term-name">Multi-Head Attention <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">Running h parallel attention operations ("heads") with separate Q, K, V projection matrices, then concatenating and projecting outputs. Different heads can specialize in different types of relationships (syntactic, semantic, positional). The key operation in every transformer layer.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="P">
+      <div class="letter-heading">P</div>
+      <div class="term-item" data-term="perplexity language model evaluation metric">
+        <div class="term-name">Perplexity <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A measure of how well a language model predicts a test corpus, defined as the exponentiated average negative log-likelihood per token: PPL = exp(-1/N Σ log P(xᵢ|x<i)). Lower perplexity = better prediction. However, perplexity alone is a poor proxy for generation quality or downstream task performance.</p>
+      </div>
+      <div class="term-item" data-term="prompt engineering in-context learning few-shot">
+        <div class="term-name">Prompt Engineering <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">The practice of crafting input prompts to elicit desired behavior from an LLM without updating model weights. Techniques include zero-shot prompting, few-shot exemplars, chain-of-thought reasoning, role assignments, and structured output specification. Effective prompting can dramatically change model outputs.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="Q">
+      <div class="letter-heading">Q</div>
+      <div class="term-item" data-term="quantization int8 gguf gptq model compression">
+        <div class="term-name">Quantization <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">Reducing the numerical precision of model weights (and sometimes activations) to decrease memory footprint and increase inference speed. Common formats: FP16 (16-bit), INT8 (8-bit), INT4 (4-bit). Methods include GPTQ (post-training quantization), AWQ (activation-aware), and GGUF (used by llama.cpp for CPU inference).</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="R">
+      <div class="letter-heading">R</div>
+      <div class="term-item" data-term="rag retrieval augmented generation context">
+        <div class="term-name">RAG (Retrieval-Augmented Generation) <span class="term-tag tag-rag">RAG</span></div>
+        <p class="term-def">A pattern that augments LLM generation with relevant documents retrieved from an external knowledge base. At inference time, a retriever fetches top-k relevant chunks for the query; these are injected into the prompt as context before generation. RAG reduces hallucinations on knowledge-intensive tasks and allows knowledge updates without retraining.</p>
+        <a href="courses.html" class="term-link">→ See: RAG Track courses</a>
+      </div>
+      <div class="term-item" data-term="rlhf reinforcement learning human feedback reward model">
+        <div class="term-name">RLHF (Reinforcement Learning from Human Feedback) <span class="term-tag tag-train">Training</span></div>
+        <p class="term-def">A training paradigm that fine-tunes LLMs using human preference data. Three steps: (1) supervised fine-tuning on demonstrations, (2) training a reward model on human preference pairs, (3) RL fine-tuning (typically PPO) to maximize reward while constraining KL divergence from the SFT model. Used in InstructGPT, GPT-4, Claude, and most instruction-following models.</p>
+      </div>
+      <div class="term-item" data-term="rope rotary position embedding llama mistral">
+        <div class="term-name">RoPE (Rotary Position Embedding) <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A positional encoding scheme that encodes position by rotating query and key vectors in 2D subspaces using complex multiplication. RoPE naturally encodes relative positions (Qₘ · Kₙ depends only on m-n), enables length extrapolation beyond training length, and is used in LLaMA, Mistral, Gemma, and most modern open-source LLMs.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="S">
+      <div class="letter-heading">S</div>
+      <div class="term-item" data-term="softmax temperature probability distribution">
+        <div class="term-name">Softmax <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A function that converts a vector of real-valued scores into a probability distribution: softmax(xᵢ) = exp(xᵢ) / Σⱼ exp(xⱼ). Used in attention (to normalize scores into weights) and in the final layer (to produce next-token probabilities). Temperature scaling divides logits before softmax to control distribution sharpness.</p>
+      </div>
+      <div class="term-item" data-term="speculative decoding inference speed draft model">
+        <div class="term-name">Speculative Decoding <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">A technique to accelerate LLM inference where a small draft model generates k candidate tokens, then the large target model verifies all k tokens in a single parallel forward pass. Accepted tokens are kept; the first rejected token is corrected. Can achieve 2-3x speedup with no quality loss when draft and target are well-matched.</p>
+      </div>
+      <div class="term-item" data-term="superposition features polysemanticity mechanistic">
+        <div class="term-name">Superposition <span class="term-tag tag-safety">Safety</span></div>
+        <p class="term-def">The phenomenon where neural networks represent more features than they have neurons by encoding multiple features in the same neurons (polysemanticity). Features are represented as nearly-orthogonal directions in activation space. Understanding superposition is central to mechanistic interpretability research.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="T">
+      <div class="letter-heading">T</div>
+      <div class="term-item" data-term="transformer architecture encoder decoder">
+        <div class="term-name">Transformer <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">The dominant neural network architecture for NLP, introduced in "Attention Is All You Need" (Vaswani et al., 2017). Key components: multi-head self-attention, position-wise feed-forward networks, residual connections, and layer normalization. Replaces RNNs by enabling parallel computation over sequences. All modern LLMs are transformer-based.</p>
+      </div>
+      <div class="term-item" data-term="tokenization token subword vocabulary">
+        <div class="term-name">Tokenization <span class="term-tag tag-arch">Architecture</span></div>
+        <p class="term-def">The process of converting raw text into discrete tokens (integers) that an LLM can process. Tokens represent subword units rather than characters or words — "tokenization" might become ["token", "ization"] depending on the vocabulary. Tokenizer design affects model performance, multilingual capability, and efficiency.</p>
+      </div>
+    </div>
+
+    <div class="letter-group" data-letter="V">
+      <div class="letter-heading">V</div>
+      <div class="term-item" data-term="vector database similarity search pinecone weaviate">
+        <div class="term-name">Vector Database <span class="term-tag tag-rag">RAG</span></div>
+        <p class="term-def">A database optimized for storing and querying high-dimensional embedding vectors using approximate nearest neighbor (ANN) search. Popular options: Pinecone (managed), Weaviate (open-source), Qdrant (open-source), pgvector (PostgreSQL extension), Chroma (lightweight). Core infrastructure component in RAG systems.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="gl-sidebar">
+    <div class="gs-card">
+      <h4>📚 Go deeper</h4>
+      <p>Every term here links to the course or paper where it's explained in full detail, with code and math.</p>
+      <a href="courses.html">Browse Courses →</a>
+    </div>
+    <div class="gs-card">
+      <h4>📄 White Papers</h4>
+      <p>Read the original papers behind these concepts — fully annotated for practitioners.</p>
+      <a href="whitepapers.html">See Papers →</a>
+    </div>
+    <div class="gs-card">
+      <h4>⚡ Full access</h4>
+      <p>Get the complete glossary plus 38 courses and 120+ annotated papers for ₹99/month.</p>
+      <a href="signup.html">Get Started →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="gbar-row"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+  <div class="fg">
+    <div class="fb"><a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a><p>India's most rigorous AI education platform. For engineers who want to understand, not just use.</p></div>
+    <div class="fc"><h5>Learn</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html">LLM Foundations</a></li><li><a href="courses.html">RAG Systems</a></li></ul></div>
+    <div class="fc"><h5>Resources</h5><ul><li><a href="whitepapers.html">White Papers</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+    <div class="fc"><h5>Company</h5><ul><li><a href="about.html">About</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+  </div>
+  <div class="fbot"><span>© 2025 AI Shiksha · All rights reserved</span><span>Made with ❤️ in India</span></div>
+</footer>
+
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('sh');});},{threshold:.05});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// Build alpha nav
+const letters=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+const existingLetters=new Set([...document.querySelectorAll('.letter-group')].map(g=>g.dataset.letter));
+const nav=document.getElementById('alpha-nav');
+letters.forEach(l=>{
+  const btn=document.createElement('button');
+  btn.className='alpha-btn'+(existingLetters.has(l)?' has-terms':'');
+  btn.textContent=l;
+  if(existingLetters.has(l)){btn.onclick=()=>scrollToLetter(l,btn);}
+  nav.appendChild(btn);
+});
+
+function scrollToLetter(l,btn){
+  document.querySelectorAll('.alpha-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const group=document.querySelector('[data-letter="'+l+'"]');
+  if(group)group.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function filterTerms(){
+  const q=document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.term-item').forEach(el=>{
+    el.style.display=(!q||el.dataset.term.includes(q)||el.textContent.toLowerCase().includes(q))?'':'none';
+  });
+  document.querySelectorAll('.letter-group').forEach(g=>{
+    const any=[...g.querySelectorAll('.term-item')].some(t=>t.style.display!=='none');
+    g.style.display=any?'':'none';
+  });
+}
+window.filterTerms=filterTerms;
+</script>
+</body>
+</html>

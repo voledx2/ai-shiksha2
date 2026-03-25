@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;cursor:none;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:4px}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1a1a2e;letter-spacing:-.3px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{font-size:14px;color:#555;text-decoration:none;font-weight:400;transition:color .2s}
+.nav-links a:hover{color:#1a1a2e}
+.nav-cta{background:#1a1a2e!important;color:#fff!important;padding:9px 22px!important;border-radius:24px;font-weight:500!important;transition:background .2s!important}
+.nav-cta:hover{background:#333!important}
+/* HERO */
+.about-hero{padding:140px 64px 80px;max-width:1200px;margin:0 auto}
+.about-kicker{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#1a73e8;margin-bottom:20px}
+.about-h1{font-size:clamp(42px,6vw,80px);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:#1a1a2e;max-width:700px;margin-bottom:32px}
+.about-h1 em{font-style:normal;color:rgba(0,0,0,.28)}
+.about-lead{font-size:clamp(17px,2vw,21px);color:#555;max-width:600px;line-height:1.7}
+/* GBAR */
+.gbar{display:flex;height:3px;margin:60px 0;max-width:1200px;margin-left:auto;margin-right:auto}
+.gb{flex:1}.gb:nth-child(1){background:#4285f4}.gb:nth-child(2){background:#ea4335}.gb:nth-child(3){background:#fbbc04}.gb:nth-child(4){background:#34a853}
+/* SECTION */
+.section{padding:80px 64px;max-width:1200px;margin:0 auto}
+.section-kicker{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a73e8;margin-bottom:14px}
+.section-h{font-size:clamp(28px,3.5vw,46px);font-weight:700;letter-spacing:-.03em;color:#1a1a2e;margin-bottom:20px;line-height:1.15}
+.section-p{font-size:16px;color:#666;line-height:1.75;max-width:640px}
+.section-p+.section-p{margin-top:14px}
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;padding:80px 64px;max-width:1200px;margin:0 auto}
+.two-col.flip{direction:rtl}.two-col.flip>*{direction:ltr}
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden;max-width:1200px;margin:0 auto}
+.sg-item{background:#fff;padding:36px 32px;text-align:center}
+.sg-n{font-size:44px;font-weight:700;letter-spacing:-.03em;color:#1a1a2e;line-height:1}
+.sg-l{font-size:13px;color:#aaa;margin-top:8px;letter-spacing:.03em}
+/* TEAM */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.tcard{border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:32px;transition:all .3s;cursor:none}
+.tcard:hover{box-shadow:0 8px 30px rgba(0,0,0,.08);transform:translateY(-3px)}
+.tcard-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#e8f0fe,#c5d8fd);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
+.tcard h3{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.tcard-role{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#1a73e8;margin-bottom:14px}
+.tcard p{font-size:13px;color:#888;line-height:1.65}
+/* VALUES */
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+.vcard{border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:28px;position:relative;overflow:hidden}
+.vcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,#1a73e8)}
+.vcard-num{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#ccc;margin-bottom:14px}
+.vcard h3{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:10px}
+.vcard p{font-size:13px;color:#888;line-height:1.65}
+/* CTA */
+.about-cta{background:#1a1a2e;padding:100px 64px;text-align:center;margin-top:80px}
+.about-cta h2{font-size:clamp(32px,4.5vw,58px);font-weight:700;letter-spacing:-.03em;color:#fff;margin-bottom:18px}
+.about-cta p{font-size:17px;color:rgba(255,255,255,.45);max-width:420px;margin:0 auto 36px}
+.btn-wh{background:#fff;color:#1a1a2e;padding:16px 38px;border-radius:50px;font-size:15px;font-weight:600;text-decoration:none;transition:all .25s;cursor:none;display:inline-block}
+.btn-wh:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,255,255,.15)}
+/* FOOTER */
+footer{background:#fff;border-top:1px solid rgba(0,0,0,.07);padding:60px 64px 32px}
+.fg{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.fb-p{font-size:13px;color:#999;line-height:1.7;margin-top:12px;max-width:240px}
+.fc h5{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:16px}
+.fc ul{list-style:none}.fc ul li{margin-bottom:9px}
+.fc ul a{font-size:13px;color:#777;text-decoration:none;transition:color .2s}
+.fc ul a:hover{color:#1a73e8}
+.fbot{display:flex;justify-content:space-between;border-top:1px solid rgba(0,0,0,.07);padding-top:22px;font-size:12px;color:#ccc}
+.gbar-row{display:flex;height:4px;margin-bottom:52px}
+/* REVEAL */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.rv.sh{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+@media(max-width:768px){
+  nav{padding:0 20px}.nav-links{display:none}
+  .about-hero,.section{padding:100px 24px 48px}
+  .two-col{grid-template-columns:1fr;padding:48px 24px;gap:40px}
+  .team-grid,.values-grid{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .fg{grid-template-columns:1fr 1fr}
+  .about-cta{padding:60px 24px}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+<nav>
+  <a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#courses">Courses</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li><a href="login.html">Sign in</a></li>
+    <li><a href="signup.html" class="nav-cta">Shuru Karo</a></li>
+  </ul>
+</nav>
+
+<div class="about-hero rv">
+  <div class="about-kicker">Our Story</div>
+  <h1 class="about-h1">Built for engineers who want to <em>truly</em> understand AI</h1>
+  <p class="about-lead">AI Shiksha was born from a simple frustration: every course taught you what AI does, but none explained why. We built the platform we wished existed.</p>
+</div>
+
+<div class="gbar" style="padding:0 64px"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+
+<div class="stat-grid">
+  <div class="sg-item rv"><div class="sg-n">4,800+</div><div class="sg-l">Active Learners</div></div>
+  <div class="sg-item rv d1"><div class="sg-n">38</div><div class="sg-l">Deep Courses</div></div>
+  <div class="sg-item rv d2"><div class="sg-n">120+</div><div class="sg-l">White Papers</div></div>
+  <div class="sg-item rv d3"><div class="sg-n">4.9★</div><div class="sg-l">Avg Rating</div></div>
+</div>
+
+<div class="two-col">
+  <div class="rv">
+    <div class="section-kicker">The Problem</div>
+    <h2 class="section-h">Most AI education is surface-level by design</h2>
+    <p class="section-p">Courses show you how to call an API. They don't show you what happens inside. You learn to use a hammer without understanding metallurgy.</p>
+    <p class="section-p">We think that's a problem — especially as AI becomes the foundational layer of all software. The engineers who understand the internals will build the future. The ones who don't will be replaced by it.</p>
+  </div>
+  <div class="rv d1">
+    <div style="background:#f8f9fe;border-radius:20px;padding:40px;border:1px solid rgba(0,0,0,.07)">
+      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:20px">What we cover</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.07)"><span style="font-size:20px">🧠</span><div><div style="font-size:14px;font-weight:600;color:#1a1a2e">First Principles</div><div style="font-size:12px;color:#aaa">Why before how</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.07)"><span style="font-size:20px">💻</span><div><div style="font-size:14px;font-weight:600;color:#1a1a2e">Working Code</div><div style="font-size:12px;color:#aaa">Every concept, annotated</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.07)"><span style="font-size:20px">📐</span><div><div style="font-size:14px;font-weight:600;color:#1a1a2e">The Math</div><div style="font-size:12px;color:#aaa">Equations explained, not skipped</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.07)"><span style="font-size:20px">🔬</span><div><div style="font-size:14px;font-weight:600;color:#1a1a2e">Research Depth</div><div style="font-size:12px;color:#aaa">120+ papers, annotated</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="background:#fafafa;max-width:100%;padding:80px 64px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="rv"><div class="section-kicker">Meet the Team</div><h2 class="section-h">Built by practitioners, for practitioners</h2></div>
+    <div class="team-grid">
+      <div class="tcard rv d1">
+        <div class="tcard-avatar">👨‍💻</div>
+        <h3>Arjun Mehta</h3>
+        <div class="tcard-role">Founder &amp; Curriculum Lead</div>
+        <p>Former ML engineer at Google Brain. Spent 6 years making sure LLMs failed gracefully in production. Now explains why they fail, clearly.</p>
+      </div>
+      <div class="tcard rv d2">
+        <div class="tcard-avatar">👩‍🔬</div>
+        <h3>Priya Nair</h3>
+        <div class="tcard-role">Research &amp; Papers</div>
+        <p>PhD in NLP from IIT Bombay. Has read — and annotated — over 400 AI papers. She makes the dense ones readable without losing the math.</p>
+      </div>
+      <div class="tcard rv d3">
+        <div class="tcard-avatar">👨‍🏫</div>
+        <h3>Rohan Das</h3>
+        <div class="tcard-role">Instructor — Agents &amp; Systems</div>
+        <p>Built production RAG and MCP systems at a Series B startup. Believes the best way to understand a system is to break it, intentionally.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="rv"><div class="section-kicker">Our Values</div><h2 class="section-h">What we believe</h2></div>
+  <div class="values-grid">
+    <div class="vcard rv d1" style="--c:#1a73e8">
+      <div class="vcard-num">01</div>
+      <h3>Depth over breadth</h3>
+      <p>One well-explained concept is worth more than ten shallow overviews. We go slow, go deep, and don't skip the hard parts.</p>
+    </div>
+    <div class="vcard rv d2" style="--c:#ea4335">
+      <div class="vcard-num">02</div>
+      <h3>Code is the truth</h3>
+      <p>Theory without implementation is incomplete. Every concept ships with working, annotated code. No hand-waving.</p>
+    </div>
+    <div class="vcard rv d3" style="--c:#34a853">
+      <div class="vcard-num">03</div>
+      <h3>Built for India</h3>
+      <p>World-class AI education shouldn't require a foreign visa or a ₹2 lakh course fee. Samajhna chahte ho? Aao.</p>
+    </div>
+    <div class="vcard rv d1" style="--c:#fbbc04">
+      <div class="vcard-num">04</div>
+      <h3>Honest pricing</h3>
+      <p>Two tiers, no tricks. If you can afford ₹99/month, you get the full curriculum. No upsells hiding the good stuff.</p>
+    </div>
+    <div class="vcard rv d2" style="--c:#9c27b0">
+      <div class="vcard-num">05</div>
+      <h3>Research-backed</h3>
+      <p>We don't cite secondary sources. Every claim traces to a paper, a benchmark, or a reproducible experiment.</p>
+    </div>
+    <div class="vcard rv d3" style="--c:#00bcd4">
+      <div class="vcard-num">06</div>
+      <h3>Community first</h3>
+      <p>Learning in isolation is slow. Our Discord isn't an afterthought — it's where some of the best discussions happen.</p>
+    </div>
+  </div>
+</div>
+
+<div class="about-cta">
+  <h2>Ready to start understanding?</h2>
+  <p>Join 4,800+ engineers who chose depth over shortcuts.</p>
+  <a href="signup.html" class="btn-wh">Start Today →</a>
+</div>
+
+<footer>
+  <div class="gbar-row"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+  <div class="fg">
+    <div><a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a><p class="fb-p">India's most rigorous AI education platform. For engineers who want to understand, not just use.</p></div>
+    <div class="fc"><h5>Learn</h5><ul><li><a href="#">LLM Foundations</a></li><li><a href="#">RAG Systems</a></li><li><a href="#">MCP &amp; Agents</a></li><li><a href="#">Fine-Tuning</a></li></ul></div>
+    <div class="fc"><h5>Resources</h5><ul><li><a href="#">White Papers</a></li><li><a href="#">Code Labs</a></li><li><a href="#">Blog</a></li><li><a href="#">Newsletter</a></li></ul></div>
+    <div class="fc"><h5>Company</h5><ul><li><a href="about.html">About</a></li><li><a href="#">Instructors</a></li><li><a href="#">Privacy</a></li><li><a href="#">Contact</a></li></ul></div>
+  </div>
+  <div class="fbot"><span>© 2025 AI Shiksha · All rights reserved</span><span>Made with ❤️ in India</span></div>
+</footer>
+
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=500,my=300,rx=500,ry=300;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('sh');});},{threshold:.15});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Courses — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;cursor:none;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:4px}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1a1a2e;letter-spacing:-.3px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{font-size:14px;color:#555;text-decoration:none;font-weight:400;transition:color .2s}
+.nav-links a:hover{color:#1a1a2e}
+.nav-links a.active{color:#1a1a2e;font-weight:600}
+.nav-cta{background:#1a1a2e!important;color:#fff!important;padding:9px 22px!important;border-radius:24px;font-weight:500!important;transition:background .2s!important}
+.nav-cta:hover{background:#333!important}
+/* HERO */
+.page-hero{padding:120px 64px 60px;max-width:1200px;margin:0 auto}
+.kicker{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#1a73e8;margin-bottom:16px}
+.page-hero h1{font-size:clamp(40px,5.5vw,68px);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:#1a1a2e;margin-bottom:20px}
+.page-hero p{font-size:18px;color:#666;max-width:580px;line-height:1.7}
+/* GBAR */
+.gbar{display:flex;height:3px;margin:0 64px 0;max-width:1200px;margin-left:auto;margin-right:auto}
+.gb{flex:1}.gb:nth-child(1){background:#4285f4}.gb:nth-child(2){background:#ea4335}.gb:nth-child(3){background:#fbbc04}.gb:nth-child(4){background:#34a853}
+/* FILTER BAR */
+.filter-bar{padding:28px 64px;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.filter-btn{padding:7px 18px;border-radius:100px;font-size:13px;font-weight:500;border:1.5px solid rgba(0,0,0,.12);background:#fff;color:#666;cursor:none;transition:all .2s}
+.filter-btn:hover,.filter-btn.on{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
+.filter-sep{width:1px;height:24px;background:rgba(0,0,0,.1);margin:0 4px}
+/* COURSE GRID */
+.courses-section{padding:0 64px 100px;max-width:1200px;margin:0 auto}
+.track-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin:48px 0 20px}
+.track-label:first-child{margin-top:0}
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.ccard{background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:16px;padding:28px 24px;transition:all .3s;cursor:none;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.ccard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--a,#1a73e8);transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+.ccard:hover{box-shadow:0 8px 32px rgba(0,0,0,.1);transform:translateY(-4px)}
+.ccard:hover::after{transform:scaleX(1)}
+.ccard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.ccard-icon{font-size:28px}
+.ccard-badge{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:6px}
+.badge-free{background:#e8f0fe;color:#1a73e8}
+.badge-sub{background:#f1f3f4;color:#888}
+.badge-pro{background:#1a1a2e;color:#fff}
+.ccard-track{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--a,#1a73e8);margin-bottom:8px}
+.ccard h3{font-size:16px;font-weight:700;color:#1a1a2e;line-height:1.35;margin-bottom:8px}
+.ccard p{font-size:13px;color:#888;line-height:1.6;margin-bottom:20px}
+.ccard-meta{display:flex;align-items:center;gap:16px;font-size:12px;color:#bbb}
+.ccard-meta span{display:flex;align-items:center;gap:5px}
+.ccard-lock{position:absolute;top:16px;right:16px;font-size:14px;opacity:.25}
+/* STATS STRIP */
+.stats-strip{background:#fafafa;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);padding:36px 64px;display:flex;gap:64px;justify-content:center;margin-bottom:0}
+.si{text-align:center}
+.si-n{font-size:36px;font-weight:700;letter-spacing:-.03em;color:#1a1a2e}
+.si-l{font-size:12px;color:#aaa;margin-top:4px}
+/* CTA DARK */
+.cta-dark{background:#1a1a2e;padding:80px 64px;text-align:center}
+.cta-dark h2{font-size:clamp(28px,3.8vw,48px);font-weight:700;letter-spacing:-.03em;color:#fff;margin-bottom:16px}
+.cta-dark p{font-size:16px;color:rgba(255,255,255,.45);max-width:420px;margin:0 auto 32px}
+.btn-wh{background:#fff;color:#1a1a2e;padding:15px 36px;border-radius:50px;font-size:15px;font-weight:600;text-decoration:none;display:inline-block;transition:all .25s;cursor:none}
+.btn-wh:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,255,255,.15)}
+/* FOOTER */
+footer{background:#fff;border-top:1px solid rgba(0,0,0,.07);padding:60px 64px 32px}
+.gbar-row{display:flex;height:4px;margin-bottom:52px}
+.fg{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.fb p{font-size:13px;color:#999;line-height:1.7;margin-top:12px;max-width:240px}
+.fc h5{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:16px}
+.fc ul{list-style:none}.fc ul li{margin-bottom:9px}
+.fc ul a{font-size:13px;color:#777;text-decoration:none;transition:color .2s}
+.fc ul a:hover{color:#1a73e8}
+.fbot{display:flex;justify-content:space-between;border-top:1px solid rgba(0,0,0,.07);padding-top:22px;font-size:12px;color:#ccc}
+/* REVEAL */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.rv.sh{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}.rv.d4{transition-delay:.4s}
+@media(max-width:900px){.cg{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+  nav{padding:0 20px}.nav-links{display:none}
+  .page-hero,.filter-bar,.courses-section{padding-left:24px;padding-right:24px}
+  .cg{grid-template-columns:1fr}
+  .stats-strip{flex-wrap:wrap;gap:32px;padding:32px 24px}
+  .fg{grid-template-columns:1fr 1fr}
+  .cta-dark{padding:60px 24px}
+  footer{padding:40px 24px 24px}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+<nav>
+  <a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+  <ul class="nav-links">
+    <li><a href="courses.html" class="active">Courses</a></li>
+    <li><a href="whitepapers.html">White Papers</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="login.html">Sign in</a></li>
+    <li><a href="signup.html" class="nav-cta">Shuru Karo</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero rv">
+  <div class="kicker">6 Tracks · 38 Courses</div>
+  <h1>Learn AI from the inside out</h1>
+  <p>Every course includes annotated code, math derivations, and the reasoning most platforms skip. No hand-waving. Sirf asli samajh.</p>
+</div>
+
+<div class="gbar" style="margin:0 64px 0;padding:0"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+
+<div class="stats-strip">
+  <div class="si rv"><div class="si-n">38</div><div class="si-l">Courses</div></div>
+  <div class="si rv d1"><div class="si-n">6</div><div class="si-l">Tracks</div></div>
+  <div class="si rv d2"><div class="si-n">240+</div><div class="si-l">Lessons</div></div>
+  <div class="si rv d3"><div class="si-n">4,800+</div><div class="si-l">Learners</div></div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn on" onclick="filterTrack('all',this)">All Tracks</button>
+  <div class="filter-sep"></div>
+  <button class="filter-btn" onclick="filterTrack('foundation',this)">🧠 Foundation</button>
+  <button class="filter-btn" onclick="filterTrack('rag',this)">🔍 RAG</button>
+  <button class="filter-btn" onclick="filterTrack('agents',this)">⚙️ Agents</button>
+  <button class="filter-btn" onclick="filterTrack('finetuning',this)">🎯 Fine-Tuning</button>
+  <button class="filter-btn" onclick="filterTrack('architecture',this)">📐 Architecture</button>
+  <button class="filter-btn" onclick="filterTrack('systems',this)">🏗️ Systems</button>
+</div>
+
+<div class="courses-section">
+  <!-- FOUNDATION -->
+  <div class="track-label" data-track="foundation">🧠 Foundation Track</div>
+  <div class="cg">
+    <a href="course-detail.html?course=llm-foundations" class="ccard rv" style="--a:#1a73e8" data-track="foundation">
+      <div class="ccard-top"><span class="ccard-icon">🧠</span><span class="ccard-badge badge-free">Free</span></div>
+      <div class="ccard-track">Foundation</div>
+      <h3>How LLMs Actually Work</h3>
+      <p>Tokenization, the transformer architecture, and attention — built from scratch, step by step.</p>
+      <div class="ccard-meta"><span>📚 8 lessons</span><span>⏱ ~5 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+    <a href="course-detail.html?course=attention" class="ccard rv d1" style="--a:#1a73e8" data-track="foundation">
+      <div class="ccard-top"><span class="ccard-icon">🔢</span><span class="ccard-badge badge-free">Free</span></div>
+      <div class="ccard-track">Foundation</div>
+      <h3>Attention Mechanisms: Scaled Dot-Product to Multi-Head</h3>
+      <p>Why we divide by √d_k, what breaks if we don't, and how multi-head attention works in practice.</p>
+      <div class="ccard-meta"><span>📚 6 lessons</span><span>⏱ ~4 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+    <a href="course-detail.html?course=tokenization" class="ccard rv d2" style="--a:#1a73e8" data-track="foundation">
+      <div class="ccard-top"><span class="ccard-icon">✂️</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track">Foundation</div>
+      <h3>Tokenization Deep Dive: BPE, WordPiece & SentencePiece</h3>
+      <p>How text becomes tokens — and why the tokenizer choice affects everything downstream.</p>
+      <div class="ccard-meta"><span>📚 5 lessons</span><span>⏱ ~3 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+    <a href="course-detail.html?course=embeddings" class="ccard rv d3" style="--a:#1a73e8" data-track="foundation">
+      <div class="ccard-top"><span class="ccard-icon">🌐</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track">Foundation</div>
+      <h3>Embeddings & Semantic Space</h3>
+      <p>What does it mean for words to "live" in space? Cosine similarity, geometry, and why it works.</p>
+      <div class="ccard-meta"><span>📚 7 lessons</span><span>⏱ ~4 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+    <a href="course-detail.html?course=prompting" class="ccard rv d4" style="--a:#1a73e8" data-track="foundation">
+      <div class="ccard-top"><span class="ccard-icon">💬</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track">Foundation</div>
+      <h3>Prompt Engineering: From Basics to Chain-of-Thought</h3>
+      <p>Zero-shot, few-shot, CoT, ReAct — every technique with reproducible experiments.</p>
+      <div class="ccard-meta"><span>📚 9 lessons</span><span>⏱ ~5 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+    <a href="course-detail.html?course=llm-eval" class="ccard rv d1" style="--a:#1a73e8" data-track="foundation">
+      <div class="ccard-top"><span class="ccard-icon">📊</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track">Foundation</div>
+      <h3>LLM Evaluation: BLEU, ROUGE, BERTScore & Beyond</h3>
+      <p>How to measure what matters — and why perplexity alone is a lie.</p>
+      <div class="ccard-meta"><span>📚 6 lessons</span><span>⏱ ~3 hrs</span><span>⭐ 4.7</span></div>
+    </a>
+  </div>
+
+  <!-- RAG -->
+  <div class="track-label" data-track="rag">🔍 RAG Track</div>
+  <div class="cg">
+    <a href="course-detail.html?course=rag-intro" class="ccard rv" style="--a:#ea4335" data-track="rag">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🔍</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#ea4335">RAG</div>
+      <h3>Retrieval-Augmented Generation: DPR to Production</h3>
+      <p>Why RAG is necessary, what dense retrieval actually does, and how to build it end to end.</p>
+      <div class="ccard-meta"><span>📚 10 lessons</span><span>⏱ ~7 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+    <a href="course-detail.html?course=vector-db" class="ccard rv d1" style="--a:#ea4335" data-track="rag">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🗄️</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#ea4335">RAG</div>
+      <h3>Vector Databases: HNSW, IVF & Choosing Right</h3>
+      <p>Pinecone vs Weaviate vs pgvector — with benchmarks and the index math explained.</p>
+      <div class="ccard-meta"><span>📚 7 lessons</span><span>⏱ ~5 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+    <a href="course-detail.html?course=chunking" class="ccard rv d2" style="--a:#ea4335" data-track="rag">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">✂️</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#ea4335">RAG</div>
+      <h3>Chunking, Re-ranking & Hybrid Search</h3>
+      <p>Fixed vs semantic chunking, ColBERT re-ranking, BM25+dense hybrid — what actually works in prod.</p>
+      <div class="ccard-meta"><span>📚 8 lessons</span><span>⏱ ~5 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+  </div>
+
+  <!-- AGENTS -->
+  <div class="track-label" data-track="agents">⚙️ Agents & MCP Track</div>
+  <div class="cg">
+    <a href="course-detail.html?course=mcp-deep" class="ccard rv" style="--a:#fbbc04" data-track="agents">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">⚙️</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#b8860b">Agents</div>
+      <h3>Model Context Protocol: Complete Deep Dive</h3>
+      <p>MCP spec from scratch — tools, resources, prompts, server/client model, and building your own server.</p>
+      <div class="ccard-meta"><span>📚 12 lessons</span><span>⏱ ~8 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+    <a href="course-detail.html?course=tool-use" class="ccard rv d1" style="--a:#fbbc04" data-track="agents">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🔧</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#b8860b">Agents</div>
+      <h3>Tool Use & Function Calling</h3>
+      <p>How LLMs decide when and what to call — JSON schemas, error handling, and multi-tool orchestration.</p>
+      <div class="ccard-meta"><span>📚 7 lessons</span><span>⏱ ~4 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+    <a href="course-detail.html?course=multi-agent" class="ccard rv d2" style="--a:#fbbc04" data-track="agents">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🤝</span><span class="ccard-badge badge-pro">Pro</span></div>
+      <div class="ccard-track" style="color:#b8860b">Agents</div>
+      <h3>Multi-Agent Systems & Orchestration</h3>
+      <p>Designing agent graphs, avoiding infinite loops, and evaluating agent traces. Production patterns.</p>
+      <div class="ccard-meta"><span>📚 9 lessons</span><span>⏱ ~6 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+  </div>
+
+  <!-- FINE-TUNING -->
+  <div class="track-label" data-track="finetuning">🎯 Fine-Tuning Track</div>
+  <div class="cg">
+    <a href="course-detail.html?course=sft" class="ccard rv" style="--a:#34a853" data-track="finetuning">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🎯</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#34a853">Fine-Tuning</div>
+      <h3>Supervised Fine-Tuning: LoRA, QLoRA & Full Runs</h3>
+      <p>What SFT actually changes in the model, and how LoRA adapters work at a parameter level.</p>
+      <div class="ccard-meta"><span>📚 9 lessons</span><span>⏱ ~6 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+    <a href="course-detail.html?course=rlhf" class="ccard rv d1" style="--a:#34a853" data-track="finetuning">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🏆</span><span class="ccard-badge badge-pro">Pro</span></div>
+      <div class="ccard-track" style="color:#34a853">Fine-Tuning</div>
+      <h3>RLHF, PPO & Direct Preference Optimization</h3>
+      <p>Reward models, KL divergence constraints, DPO's elegant reformulation — complete treatment.</p>
+      <div class="ccard-meta"><span>📚 11 lessons</span><span>⏱ ~7 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+    <a href="course-detail.html?course=data-curation" class="ccard rv d2" style="--a:#34a853" data-track="finetuning">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">📋</span><span class="ccard-badge badge-pro">Pro</span></div>
+      <div class="ccard-track" style="color:#34a853">Fine-Tuning</div>
+      <h3>Training Data Curation & Dataset Design</h3>
+      <p>What makes a fine-tuning dataset good — diversity, quality filters, deduplication, and data mixing.</p>
+      <div class="ccard-meta"><span>📚 7 lessons</span><span>⏱ ~4 hrs</span><span>⭐ 4.7</span></div>
+    </a>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <div class="track-label" data-track="architecture">📐 Architecture Track</div>
+  <div class="cg">
+    <a href="course-detail.html?course=moe" class="ccard rv" style="--a:#9c27b0" data-track="architecture">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">📐</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#9c27b0">Architecture</div>
+      <h3>Mixture of Experts: Routing, Token Dropping & Mixtral</h3>
+      <p>Sparse MoE from first principles — how routing works and why it beats dense scaling at a fixed FLOP budget.</p>
+      <div class="ccard-meta"><span>📚 8 lessons</span><span>⏱ ~5 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+    <a href="course-detail.html?course=positional" class="ccard rv d1" style="--a:#9c27b0" data-track="architecture">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">📏</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#9c27b0">Architecture</div>
+      <h3>Positional Encodings: Sinusoidal, ALiBi & RoPE</h3>
+      <p>Why position matters, and the geometry behind rotary embeddings that power modern LLMs.</p>
+      <div class="ccard-meta"><span>📚 6 lessons</span><span>⏱ ~4 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+    <a href="course-detail.html?course=gqa" class="ccard rv d2" style="--a:#9c27b0" data-track="architecture">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🔭</span><span class="ccard-badge badge-pro">Pro</span></div>
+      <div class="ccard-track" style="color:#9c27b0">Architecture</div>
+      <h3>GQA, Sliding Window & Long-Context Architectures</h3>
+      <p>Grouped-query attention, sliding window, and the tricks behind 128k+ context models.</p>
+      <div class="ccard-meta"><span>📚 7 lessons</span><span>⏱ ~5 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+  </div>
+
+  <!-- SYSTEMS -->
+  <div class="track-label" data-track="systems">🏗️ Systems Track</div>
+  <div class="cg">
+    <a href="course-detail.html?course=inference" class="ccard rv" style="--a:#00bcd4" data-track="systems">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">⚡</span><span class="ccard-badge badge-pro">Pro</span></div>
+      <div class="ccard-track" style="color:#00838f">Systems</div>
+      <h3>Inference Optimization: KV Cache, Batching & Speculative</h3>
+      <p>How production systems serve billions of tokens cheaply — paged KV, continuous batching, speculative decoding.</p>
+      <div class="ccard-meta"><span>📚 9 lessons</span><span>⏱ ~6 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+    <a href="course-detail.html?course=quantization" class="ccard rv d1" style="--a:#00bcd4" data-track="systems">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🗜️</span><span class="ccard-badge badge-pro">Pro</span></div>
+      <div class="ccard-track" style="color:#00838f">Systems</div>
+      <h3>Quantization: INT8, GPTQ, AWQ & GGUF</h3>
+      <p>How to shrink a 70B model to run on your laptop — with the precision trade-offs explained mathematically.</p>
+      <div class="ccard-meta"><span>📚 8 lessons</span><span>⏱ ~5 hrs</span><span>⭐ 4.8</span></div>
+    </a>
+    <a href="course-detail.html?course=ai-safety" class="ccard rv d2" style="--a:#ff5722" data-track="systems">
+      <div class="ccard-lock">🔒</div>
+      <div class="ccard-top"><span class="ccard-icon">🛡️</span><span class="ccard-badge badge-sub">Learner</span></div>
+      <div class="ccard-track" style="color:#ff5722">Safety</div>
+      <h3>AI Safety & Alignment: Constitutional AI to Interpretability</h3>
+      <p>RLAIF, constitutional AI, superposition, activation patching — the technical side of safety research.</p>
+      <div class="ccard-meta"><span>📚 10 lessons</span><span>⏱ ~7 hrs</span><span>⭐ 4.9</span></div>
+    </a>
+  </div>
+</div>
+
+<div class="cta-dark">
+  <h2>Ready to go deep?</h2>
+  <p>Start with the free Foundation track. No credit card needed.</p>
+  <a href="signup.html" class="btn-wh">Start Learning — ₹99/month →</a>
+</div>
+
+<footer>
+  <div class="gbar-row"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+  <div class="fg">
+    <div class="fb"><a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a><p>India's most rigorous AI education platform. For engineers who want to understand, not just use.</p></div>
+    <div class="fc"><h5>Learn</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html">LLM Foundations</a></li><li><a href="courses.html">RAG Systems</a></li><li><a href="courses.html">MCP &amp; Agents</a></li><li><a href="courses.html">Fine-Tuning</a></li></ul></div>
+    <div class="fc"><h5>Resources</h5><ul><li><a href="whitepapers.html">White Papers</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="blog.html">Blog</a></li><li><a href="blog.html">Newsletter</a></li></ul></div>
+    <div class="fc"><h5>Company</h5><ul><li><a href="about.html">About</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li><li><a href="login.html">Sign In</a></li></ul></div>
+  </div>
+  <div class="fbot"><span>© 2025 AI Shiksha · All rights reserved</span><span>Made with ❤️ in India</span></div>
+</footer>
+
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+// Reveal on scroll
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('sh');});},{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// Filter
+function filterTrack(track,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.ccard,.track-label').forEach(el=>{
+    if(track==='all'||el.dataset.track===track){el.style.display='';}
+    else{el.style.display='none';}
+  });
+  // hide empty grids
+  document.querySelectorAll('.cg').forEach(grid=>{
+    const visible=[...grid.querySelectorAll('.ccard')].some(c=>c.style.display!=='none');
+    grid.style.display=visible?'':'none';
+  });
+}
+window.filterTrack=filterTrack;
+</script>
+</body>
+</html>

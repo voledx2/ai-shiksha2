@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How LLMs Actually Work — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;cursor:none;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:4px}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;padding:0 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1a1a2e;letter-spacing:-.3px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{font-size:14px;color:#555;text-decoration:none;font-weight:400;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:#1a1a2e}
+.nav-cta{background:#1a1a2e!important;color:#fff!important;padding:9px 22px!important;border-radius:24px;font-weight:500!important}
+.nav-cta:hover{background:#333!important}
+/* BREADCRUMB */
+.breadcrumb{padding:80px 64px 0;max-width:1200px;margin:0 auto;font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px}
+.breadcrumb a{color:#aaa;text-decoration:none;transition:color .2s}
+.breadcrumb a:hover{color:#1a73e8}
+/* HERO */
+.course-hero{padding:24px 64px 0;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:64px;align-items:start}
+.ch-left{}
+.ch-track{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a73e8;margin-bottom:12px}
+.ch-title{font-size:clamp(32px,4.5vw,54px);font-weight:700;letter-spacing:-.035em;line-height:1.1;color:#1a1a2e;margin-bottom:20px}
+.ch-desc{font-size:17px;color:#555;line-height:1.75;max-width:600px;margin-bottom:28px}
+.ch-meta{display:flex;flex-wrap:wrap;gap:20px;font-size:13px;color:#888;margin-bottom:28px}
+.ch-meta span{display:flex;align-items:center;gap:6px}
+.ch-tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:5px 14px;border-radius:100px;font-size:12px;background:#f1f3f4;color:#555;border:1px solid rgba(0,0,0,.08)}
+/* STICKY CARD */
+.sticky-wrap{position:sticky;top:80px}
+.enroll-card{border:1px solid rgba(0,0,0,.1);border-radius:20px;padding:28px;background:#fff;box-shadow:0 8px 40px rgba(0,0,0,.08)}
+.ec-badge{display:inline-block;background:#e8f3ec;color:#34a853;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:6px;margin-bottom:16px}
+.ec-price{font-size:42px;font-weight:700;letter-spacing:-.03em;color:#1a1a2e;line-height:1}
+.ec-price sup{font-size:18px;vertical-align:top;margin-top:10px;display:inline-block}
+.ec-note{font-size:13px;color:#aaa;margin-bottom:20px}
+.ec-btn{display:block;width:100%;padding:15px;background:#1a1a2e;color:#fff;border:none;border-radius:50px;font-size:15px;font-weight:500;font-family:inherit;cursor:none;transition:all .2s;text-align:center;text-decoration:none;margin-bottom:12px}
+.ec-btn:hover{background:#0d0d1a;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.ec-btn-out{display:block;width:100%;padding:14px;background:transparent;color:#1a1a2e;border:1.5px solid rgba(0,0,0,.14);border-radius:50px;font-size:15px;font-weight:500;font-family:inherit;cursor:none;transition:all .2s;text-align:center;text-decoration:none}
+.ec-btn-out:hover{border-color:#1a1a2e}
+.ec-includes{margin-top:24px;border-top:1px solid rgba(0,0,0,.07);padding-top:20px}
+.ec-includes h5{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#bbb;margin-bottom:14px}
+.ec-includes ul{list-style:none}
+.ec-includes li{font-size:13px;color:#666;padding:5px 0;display:flex;align-items:center;gap:10px}
+.ec-includes li::before{content:'✓';color:#34a853;font-weight:700;font-size:11px;flex-shrink:0}
+/* TABS */
+.tabs-wrap{padding:48px 64px 0;max-width:1200px;margin:0 auto}
+.tabs{display:flex;gap:0;border-bottom:1px solid rgba(0,0,0,.08);margin-bottom:40px}
+.tab-btn{padding:12px 24px;font-size:14px;font-weight:500;color:#888;background:none;border:none;cursor:none;border-bottom:2px solid transparent;transition:all .2s;font-family:inherit}
+.tab-btn:hover{color:#1a1a2e}
+.tab-btn.on{color:#1a1a2e;border-bottom-color:#1a1a2e}
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+/* CURRICULUM */
+.module{margin-bottom:6px}
+.module-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:#fafafa;border:1px solid rgba(0,0,0,.07);border-radius:12px;cursor:none;transition:background .2s}
+.module-header:hover{background:#f1f3f4}
+.module-header.open{border-radius:12px 12px 0 0;background:#f1f3f4}
+.mh-left{display:flex;align-items:center;gap:14px}
+.mh-num{font-size:11px;font-weight:600;color:#aaa;min-width:20px}
+.mh-title{font-size:15px;font-weight:600;color:#1a1a2e}
+.mh-right{display:flex;align-items:center;gap:16px;font-size:12px;color:#bbb}
+.mh-arrow{transition:transform .3s}
+.module-header.open .mh-arrow{transform:rotate(180deg)}
+.lessons-list{border:1px solid rgba(0,0,0,.07);border-top:none;border-radius:0 0 12px 12px;overflow:hidden;display:none}
+.lessons-list.open{display:block}
+.lesson-item{display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid rgba(0,0,0,.05);transition:background .2s}
+.lesson-item:last-child{border-bottom:none}
+.lesson-item:hover{background:#fafafa}
+.li-icon{font-size:14px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f1f3f4;flex-shrink:0}
+.li-icon.free{background:#e8f0fe}
+.li-title{flex:1;font-size:14px;color:#444}
+.li-badge{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#1a73e8;background:#e8f0fe;padding:2px 8px;border-radius:4px}
+.li-dur{font-size:12px;color:#ccc}
+.li-lock{font-size:14px;opacity:.3}
+/* WHAT YOU LEARN */
+.learn-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.learn-item{display:flex;gap:12px;padding:16px;background:#fafafa;border-radius:12px;border:1px solid rgba(0,0,0,.06)}
+.li-check{color:#34a853;font-size:16px;flex-shrink:0;margin-top:2px}
+.learn-item p{font-size:14px;color:#444;line-height:1.55}
+/* INSTRUCTOR */
+.instructor-card{display:flex;gap:24px;padding:28px;border:1px solid rgba(0,0,0,.08);border-radius:16px;align-items:flex-start}
+.inst-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#e8f0fe,#c5d8fd);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.inst-name{font-size:18px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.inst-role{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#1a73e8;margin-bottom:12px}
+.inst-bio{font-size:14px;color:#666;line-height:1.65}
+/* REVIEWS */
+.rating-summary{display:flex;gap:32px;align-items:center;padding:24px;background:#fafafa;border-radius:16px;margin-bottom:28px}
+.rs-big{font-size:60px;font-weight:700;letter-spacing:-.04em;color:#1a1a2e;line-height:1}
+.rs-stars{font-size:24px;margin-bottom:4px}
+.rs-count{font-size:13px;color:#aaa}
+.review-item{padding:20px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.review-item:last-child{border-bottom:none}
+.rv-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.rv-avatar{width:36px;height:36px;border-radius:50%;background:#f1f3f4;display:flex;align-items:center;justify-content:center;font-size:14px}
+.rv-name{font-size:14px;font-weight:600;color:#1a1a2e}
+.rv-stars{font-size:13px}
+.rv-date{font-size:12px;color:#bbb;margin-left:auto}
+.rv-text{font-size:14px;color:#555;line-height:1.65}
+/* GBAR */
+.gbar-sep{display:flex;height:3px;margin:0 64px}
+.gb{flex:1}.gb:nth-child(1){background:#4285f4}.gb:nth-child(2){background:#ea4335}.gb:nth-child(3){background:#fbbc04}.gb:nth-child(4){background:#34a853}
+/* RELATED */
+.related-section{padding:64px 64px;max-width:1200px;margin:0 auto}
+.s-kicker{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a73e8;margin-bottom:12px}
+.s-h2{font-size:clamp(26px,3vw,38px);font-weight:700;letter-spacing:-.025em;color:#1a1a2e;margin-bottom:32px}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.rcard{border:1px solid rgba(0,0,0,.09);border-radius:14px;padding:24px;text-decoration:none;color:inherit;display:block;transition:all .3s;cursor:none}
+.rcard:hover{box-shadow:0 6px 24px rgba(0,0,0,.09);transform:translateY(-3px)}
+.rcard-icon{font-size:24px;margin-bottom:12px}
+.rcard-track{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a73e8;margin-bottom:6px}
+.rcard h4{font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:6px;line-height:1.3}
+.rcard p{font-size:12px;color:#aaa}
+/* FOOTER */
+footer{background:#fff;border-top:1px solid rgba(0,0,0,.07);padding:60px 64px 32px}
+.gbar-row{display:flex;height:4px;margin-bottom:52px}
+.fg{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.fb p{font-size:13px;color:#999;line-height:1.7;margin-top:12px;max-width:240px}
+.fc h5{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:16px}
+.fc ul{list-style:none}.fc ul li{margin-bottom:9px}
+.fc ul a{font-size:13px;color:#777;text-decoration:none;transition:color .2s}
+.fc ul a:hover{color:#1a73e8}
+.fbot{display:flex;justify-content:space-between;border-top:1px solid rgba(0,0,0,.07);padding-top:22px;font-size:12px;color:#ccc}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.rv.sh{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}
+@media(max-width:900px){.course-hero{grid-template-columns:1fr}.sticky-wrap{position:static}.learn-grid{grid-template-columns:1fr}.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+  nav{padding:0 20px}.nav-links{display:none}
+  .breadcrumb,.course-hero,.tabs-wrap,.related-section{padding-left:24px;padding-right:24px}
+  .gbar-sep{margin:0 24px}
+  .related-grid{grid-template-columns:1fr}
+  .fg{grid-template-columns:1fr 1fr}
+  footer{padding:40px 24px 24px}
+  .rating-summary{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+<nav>
+  <a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+  <ul class="nav-links">
+    <li><a href="courses.html" class="active">Courses</a></li>
+    <li><a href="whitepapers.html">White Papers</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="login.html">Sign in</a></li>
+    <li><a href="signup.html" class="nav-cta">Shuru Karo</a></li>
+  </ul>
+</nav>
+
+<div class="breadcrumb rv">
+  <a href="index.html">Home</a> <span>›</span> <a href="courses.html">Courses</a> <span>›</span> <span style="color:#1a1a2e">LLM Foundations</span>
+</div>
+
+<div class="course-hero" style="padding-top:24px;padding-bottom:48px">
+  <div class="ch-left rv">
+    <div class="ch-track">🧠 Foundation Track · Course 1 of 6</div>
+    <h1 class="ch-title">How LLMs Actually Work</h1>
+    <p class="ch-desc">From raw text to token probabilities — we build the intuition and the code for transformers, attention, and language modeling from first principles. No hand-waving. Sirf asli samajh.</p>
+    <div class="ch-meta">
+      <span>📚 8 lessons</span>
+      <span>⏱ ~5 hours</span>
+      <span>⭐ 4.9 (312 ratings)</span>
+      <span>👥 2,400+ enrolled</span>
+      <span>🔄 Updated March 2025</span>
+    </div>
+    <div class="ch-tags">
+      <span class="tag">Transformers</span>
+      <span class="tag">Attention</span>
+      <span class="tag">Tokenization</span>
+      <span class="tag">Python</span>
+      <span class="tag">PyTorch</span>
+    </div>
+  </div>
+  <div class="sticky-wrap rv d1">
+    <div class="enroll-card">
+      <div class="ec-badge">✓ Free Access</div>
+      <div class="ec-price"><sup>₹</sup>0</div>
+      <div class="ec-note">Included in all plans · No credit card</div>
+      <a href="signup.html" class="ec-btn">Start this Course →</a>
+      <a href="pricing.html" class="ec-btn-out">See all plans</a>
+      <div class="ec-includes">
+        <h5>This course includes</h5>
+        <ul>
+          <li>8 annotated lessons with working code</li>
+          <li>PyTorch implementation from scratch</li>
+          <li>Mathematical derivations, step by step</li>
+          <li>Completion certificate</li>
+          <li>Discord community access</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gbar-sep"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn on" onclick="showTab('curriculum',this)">Curriculum</button>
+    <button class="tab-btn" onclick="showTab('learn',this)">What You'll Learn</button>
+    <button class="tab-btn" onclick="showTab('instructor',this)">Instructor</button>
+    <button class="tab-btn" onclick="showTab('reviews',this)">Reviews</button>
+  </div>
+
+  <!-- CURRICULUM TAB -->
+  <div class="tab-panel on" id="tab-curriculum">
+    <div class="module">
+      <div class="module-header open" onclick="toggleModule(this)">
+        <div class="mh-left"><span class="mh-num">01</span><span class="mh-title">Text, Tokens & the Language Modeling Problem</span></div>
+        <div class="mh-right"><span>2 lessons · 45 min</span><span class="mh-arrow">▾</span></div>
+      </div>
+      <div class="lessons-list open">
+        <div class="lesson-item"><div class="li-icon free">▶</div><span class="li-title">What is a language model, really?</span><span class="li-badge">Free preview</span><span class="li-dur">18 min</span></div>
+        <div class="lesson-item"><div class="li-icon free">▶</div><span class="li-title">From characters to tokens: BPE explained</span><span class="li-badge">Free preview</span><span class="li-dur">27 min</span></div>
+      </div>
+    </div>
+    <div class="module">
+      <div class="module-header" onclick="toggleModule(this)">
+        <div class="mh-left"><span class="mh-num">02</span><span class="mh-title">The Transformer Architecture</span></div>
+        <div class="mh-right"><span>2 lessons · 70 min</span><span class="mh-arrow">▾</span></div>
+      </div>
+      <div class="lessons-list">
+        <div class="lesson-item"><div class="li-icon">📄</div><span class="li-title">Encoder, decoder, and the full architecture diagram</span><span class="li-lock">🔒</span><span class="li-dur">34 min</span></div>
+        <div class="lesson-item"><div class="li-icon">💻</div><span class="li-title">Build a transformer block in PyTorch (annotated)</span><span class="li-lock">🔒</span><span class="li-dur">36 min</span></div>
+      </div>
+    </div>
+    <div class="module">
+      <div class="module-header" onclick="toggleModule(this)">
+        <div class="mh-left"><span class="mh-num">03</span><span class="mh-title">Scaled Dot-Product Attention</span></div>
+        <div class="mh-right"><span>2 lessons · 68 min</span><span class="mh-arrow">▾</span></div>
+      </div>
+      <div class="lessons-list">
+        <div class="lesson-item"><div class="li-icon">📄</div><span class="li-title">Q, K, V: what they actually represent geometrically</span><span class="li-lock">🔒</span><span class="li-dur">30 min</span></div>
+        <div class="lesson-item"><div class="li-icon">💻</div><span class="li-title">Why √d_k? The variance math, step by step</span><span class="li-lock">🔒</span><span class="li-dur">38 min</span></div>
+      </div>
+    </div>
+    <div class="module">
+      <div class="module-header" onclick="toggleModule(this)">
+        <div class="mh-left"><span class="mh-num">04</span><span class="mh-title">Multi-Head Attention & Positional Encoding</span></div>
+        <div class="mh-right"><span>1 lesson · 40 min</span><span class="mh-arrow">▾</span></div>
+      </div>
+      <div class="lessons-list">
+        <div class="lesson-item"><div class="li-icon">💻</div><span class="li-title">Multi-head attention + sinusoidal encodings in code</span><span class="li-lock">🔒</span><span class="li-dur">40 min</span></div>
+      </div>
+    </div>
+    <div class="module">
+      <div class="module-header" onclick="toggleModule(this)">
+        <div class="mh-left"><span class="mh-num">05</span><span class="mh-title">Training a Language Model End-to-End</span></div>
+        <div class="mh-right"><span>1 lesson · 55 min</span><span class="mh-arrow">▾</span></div>
+      </div>
+      <div class="lessons-list">
+        <div class="lesson-item"><div class="li-icon">💻</div><span class="li-title">Train a small GPT on custom text from scratch</span><span class="li-lock">🔒</span><span class="li-dur">55 min</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT YOU'LL LEARN TAB -->
+  <div class="tab-panel" id="tab-learn">
+    <div class="learn-grid">
+      <div class="learn-item"><span class="li-check">✓</span><p>Explain how attention works at a mathematical level — not just "it finds relationships"</p></div>
+      <div class="learn-item"><span class="li-check">✓</span><p>Build a working transformer block in PyTorch from scratch, with every line annotated</p></div>
+      <div class="learn-item"><span class="li-check">✓</span><p>Understand why scaling by √d_k is necessary — and what breaks without it</p></div>
+      <div class="learn-item"><span class="li-check">✓</span><p>Implement multi-head attention and understand why multiple heads help</p></div>
+      <div class="learn-item"><span class="li-check">✓</span><p>Understand BPE tokenization and why tokenizer design choices matter downstream</p></div>
+      <div class="learn-item"><span class="li-check">✓</span><p>Train a small GPT-style model on custom text — see the loss curve converge</p></div>
+      <div class="learn-item"><span class="li-check">✓</span><p>Explain sinusoidal positional encodings and why they generalise to unseen lengths</p></div>
+      <div class="learn-item"><span class="li-check">✓</span><p>Distinguish encoder-only, decoder-only, and encoder-decoder architectures by task</p></div>
+    </div>
+  </div>
+
+  <!-- INSTRUCTOR TAB -->
+  <div class="tab-panel" id="tab-instructor">
+    <div class="instructor-card">
+      <div class="inst-avatar">👨‍💻</div>
+      <div>
+        <div class="inst-name">Arjun Mehta</div>
+        <div class="inst-role">Founder & Curriculum Lead</div>
+        <div class="inst-bio">Former ML engineer at Google Brain, where he spent 6 years making sure large language models failed gracefully in production — and figuring out exactly why they failed when they did. Arjun built AI Shiksha because he kept meeting brilliant engineers who used GPT every day but couldn't explain what attention was doing. He believes the bottleneck in Indian AI isn't talent — it's depth of understanding. This course is his attempt to fix that.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEWS TAB -->
+  <div class="tab-panel" id="tab-reviews">
+    <div class="rating-summary">
+      <div>
+        <div class="rs-big">4.9</div>
+        <div class="rs-stars">⭐⭐⭐⭐⭐</div>
+        <div class="rs-count">312 ratings</div>
+      </div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="flex:1;height:6px;background:#f1f3f4;border-radius:3px;overflow:hidden"><div style="width:87%;height:100%;background:#fbbc04;border-radius:3px"></div></div><span style="font-size:13px;color:#888;white-space:nowrap">5 ★ 87%</span></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px"><div style="flex:1;height:6px;background:#f1f3f4;border-radius:3px;overflow:hidden"><div style="width:9%;height:100%;background:#fbbc04;border-radius:3px"></div></div><span style="font-size:13px;color:#888;white-space:nowrap">4 ★ 9%</span></div>
+        <div style="display:flex;align-items:center;gap:12px"><div style="flex:1;height:6px;background:#f1f3f4;border-radius:3px;overflow:hidden"><div style="width:4%;height:100%;background:#fbbc04;border-radius:3px"></div></div><span style="font-size:13px;color:#888;white-space:nowrap">3 ★ 4%</span></div>
+      </div>
+    </div>
+    <div class="review-item">
+      <div class="rv-top"><div class="rv-avatar">🧑</div><div><div class="rv-name">Rahul K.</div><div class="rv-stars">⭐⭐⭐⭐⭐</div></div><span class="rv-date">March 2025</span></div>
+      <p class="rv-text">Finally, someone explains why we divide by √d_k instead of just saying "for stability". The PyTorch code is also super clean — I actually understood every line. Best ₹99 I've ever spent.</p>
+    </div>
+    <div class="review-item">
+      <div class="rv-top"><div class="rv-avatar">👩</div><div><div class="rv-name">Sneha R.</div><div class="rv-stars">⭐⭐⭐⭐⭐</div></div><span class="rv-date">Feb 2025</span></div>
+      <p class="rv-text">I've taken 3 other transformer courses. This one is the only one where I actually walked away understanding multi-head attention at an intuitive level. The geometric explanation is brilliant.</p>
+    </div>
+    <div class="review-item">
+      <div class="rv-top"><div class="rv-avatar">🧑‍💻</div><div><div class="rv-name">Vikram P.</div><div class="rv-stars">⭐⭐⭐⭐⭐</div></div><span class="rv-date">Jan 2025</span></div>
+      <p class="rv-text">Arjun's teaching style is exactly what I needed — straight to the point, math-first, no fluff. The code labs are the best part. Highly recommend for anyone serious about AI.</p>
+    </div>
+  </div>
+</div>
+
+<div class="related-section">
+  <div class="s-kicker">Up Next</div>
+  <h2 class="s-h2">Continue your Foundation Track</h2>
+  <div class="related-grid">
+    <a href="course-detail.html?course=attention" class="rcard">
+      <div class="rcard-icon">🔢</div>
+      <div class="rcard-track">Foundation</div>
+      <h4>Attention Mechanisms: Scaled Dot-Product to Multi-Head</h4>
+      <p>6 lessons · Free</p>
+    </a>
+    <a href="course-detail.html?course=embeddings" class="rcard">
+      <div class="rcard-icon">🌐</div>
+      <div class="rcard-track">Foundation</div>
+      <h4>Embeddings & Semantic Space</h4>
+      <p>7 lessons · Learner</p>
+    </a>
+    <a href="course-detail.html?course=rag-intro" class="rcard">
+      <div class="rcard-icon">🔍</div>
+      <div class="rcard-track">RAG</div>
+      <h4>Retrieval-Augmented Generation: DPR to Production</h4>
+      <p>10 lessons · Learner</p>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="gbar-row"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+  <div class="fg">
+    <div class="fb"><a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a><p>India's most rigorous AI education platform. For engineers who want to understand, not just use.</p></div>
+    <div class="fc"><h5>Learn</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html">LLM Foundations</a></li><li><a href="courses.html">RAG Systems</a></li><li><a href="courses.html">MCP &amp; Agents</a></li></ul></div>
+    <div class="fc"><h5>Resources</h5><ul><li><a href="whitepapers.html">White Papers</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+    <div class="fc"><h5>Company</h5><ul><li><a href="about.html">About</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+  </div>
+  <div class="fbot"><span>© 2025 AI Shiksha · All rights reserved</span><span>Made with ❤️ in India</span></div>
+</footer>
+
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('sh');});},{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('tab-'+id).classList.add('on');
+}
+function toggleModule(header){
+  const list=header.nextElementSibling;
+  header.classList.toggle('open');
+  list.classList.toggle('open');
+}
+window.showTab=showTab;
+window.toggleModule=toggleModule;
+</script>
+</body>
+</html>

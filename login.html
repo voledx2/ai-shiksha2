@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;cursor:none;min-height:100vh;display:flex;flex-direction:column}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+/* SPLIT LAYOUT */
+.split{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+/* LEFT PANEL */
+.left{background:#1a1a2e;padding:60px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.left-logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.left-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 0}
+.left-body h2{font-size:clamp(32px,3.5vw,48px);font-weight:700;letter-spacing:-.03em;color:#fff;margin-bottom:20px;line-height:1.1}
+.left-body h2 em{font-style:normal;color:rgba(255,255,255,.35)}
+.left-body p{font-size:16px;color:rgba(255,255,255,.45);line-height:1.75;max-width:340px}
+.left-rings{position:absolute;bottom:-80px;right:-80px;width:400px;height:400px;pointer-events:none}
+.lr-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.06);top:50%;left:50%;transform:translate(-50%,-50%)}
+.lr-ring:nth-child(1){width:120px;height:120px;border-color:rgba(255,255,255,.1)}
+.lr-ring:nth-child(2){width:220px;height:220px}
+.lr-ring:nth-child(3){width:320px;height:320px}
+.lr-ring:nth-child(4){width:400px;height:400px}
+.left-quote{font-size:13px;color:rgba(255,255,255,.3);line-height:1.6;border-left:2px solid rgba(255,255,255,.1);padding-left:16px;margin-top:48px;max-width:340px}
+/* RIGHT PANEL */
+.right{padding:60px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.form-wrap{width:100%;max-width:400px}
+.form-title{font-size:28px;font-weight:700;letter-spacing:-.02em;color:#1a1a2e;margin-bottom:8px}
+.form-sub{font-size:14px;color:#888;margin-bottom:40px}
+.form-sub a{color:#1a73e8;text-decoration:none}
+.form-sub a:hover{text-decoration:underline}
+/* FORM ELEMENTS */
+.field{margin-bottom:20px}
+.field label{display:block;font-size:13px;font-weight:500;color:#444;margin-bottom:8px;letter-spacing:.01em}
+.field input{width:100%;padding:13px 16px;border:1.5px solid rgba(0,0,0,.12);border-radius:12px;font-size:15px;font-family:inherit;color:#1a1a2e;background:#fff;transition:border-color .2s,box-shadow .2s;outline:none;cursor:none}
+.field input:focus{border-color:#1a1a2e;box-shadow:0 0 0 3px rgba(26,26,46,.08)}
+.field input::placeholder{color:#bbb}
+.field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.field-row label{margin-bottom:0}
+.forgot{font-size:13px;color:#1a73e8;text-decoration:none}
+.forgot:hover{text-decoration:underline}
+.btn-submit{width:100%;padding:15px;background:#1a1a2e;color:#fff;border:none;border-radius:50px;font-size:15px;font-weight:500;font-family:inherit;cursor:none;transition:all .2s;margin-top:8px}
+.btn-submit:hover{background:#0d0d1a;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.divider{display:flex;align-items:center;gap:16px;margin:28px 0;color:#ddd;font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(0,0,0,.08)}
+/* GOOGLE BTN */
+.btn-google{width:100%;padding:13px;background:#fff;color:#1a1a2e;border:1.5px solid rgba(0,0,0,.12);border-radius:50px;font-size:14px;font-weight:500;font-family:inherit;cursor:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+.btn-google:hover{border-color:rgba(0,0,0,.25);box-shadow:0 3px 12px rgba(0,0,0,.08)}
+.g-icon{width:18px;height:18px}
+.form-footer{margin-top:32px;text-align:center;font-size:13px;color:#aaa}
+.form-footer a{color:#1a73e8;text-decoration:none}
+@media(max-width:768px){
+  .split{grid-template-columns:1fr}
+  .left{display:none}
+  .right{padding:100px 28px 40px}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+<div class="split">
+  <!-- LEFT -->
+  <div class="left">
+    <a href="index.html" class="left-logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+    <div class="left-body">
+      <h2>Wapas aao.<br><em>Aage badho.</em></h2>
+      <p>Your courses, notes, and progress are waiting. Pick up exactly where you left off.</p>
+      <div class="left-quote">"The engineers who understand AI internals will build what comes next. Everyone else will just use it."</div>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.2)">© 2025 AI Shiksha</div>
+    <div class="left-rings">
+      <div class="lr-ring"></div><div class="lr-ring"></div><div class="lr-ring"></div><div class="lr-ring"></div>
+    </div>
+  </div>
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="form-wrap">
+      <div class="form-title">Welcome back</div>
+      <div class="form-sub">Don't have an account? <a href="signup.html">Sign up free</a></div>
+      <a href="#" class="btn-google">
+        <svg class="g-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </a>
+      <div class="divider">or sign in with email</div>
+      <form onsubmit="return false;">
+        <div class="field">
+          <label>Email address</label>
+          <input type="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field">
+          <div class="field-row"><label>Password</label><a href="#" class="forgot">Forgot?</a></div>
+          <input type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-submit">Sign in →</button>
+      </form>
+      <div class="form-footer">New to AI Shiksha? <a href="signup.html">Create an account</a></div>
+    </div>
+  </div>
+</div>
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=500,my=300,rx=500,ry=300;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button,input').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+</script>
+</body>
+</html>

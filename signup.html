@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up — AI Shiksha</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:#1a1a2e;font-family:'Google Sans','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;cursor:none;min-height:100vh}
+#cur{position:fixed;width:10px;height:10px;background:#1a1a2e;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,0,0,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+body.hovering #cur{width:20px;height:20px}
+body.hovering #cur-ring{width:58px;height:58px;border-color:rgba(0,0,0,.1)}
+/* STEPS */
+.page{display:none;min-height:100vh}.page.active{display:block}
+/* STEP 1 — PLAN SELECTION */
+#step1{display:flex;flex-direction:column;align-items:center;padding:100px 24px 60px;background:#fff}
+.step-logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#1a1a2e;letter-spacing:-.3px;margin-bottom:60px}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a73e8,#4285f4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700}
+.step-kicker{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a73e8;margin-bottom:14px;text-align:center}
+.step-h{font-size:clamp(28px,4vw,46px);font-weight:700;letter-spacing:-.03em;color:#1a1a2e;text-align:center;margin-bottom:10px}
+.step-sub{font-size:16px;color:#888;text-align:center;margin-bottom:52px}
+/* PLAN CARDS */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:720px;width:100%;margin-bottom:32px}
+.plan-card{border:2px solid rgba(0,0,0,.1);border-radius:20px;padding:32px;cursor:none;transition:all .25s;position:relative;background:#fff}
+.plan-card:hover{border-color:rgba(0,0,0,.3);box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.plan-card.selected{border-color:#1a1a2e;box-shadow:0 0 0 1px #1a1a2e,0 12px 40px rgba(0,0,0,.1)}
+.plan-pop{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 16px;border-radius:100px;white-space:nowrap}
+.plan-radio{position:absolute;top:20px;right:20px;width:20px;height:20px;border:2px solid rgba(0,0,0,.15);border-radius:50%;transition:all .2s}
+.plan-card.selected .plan-radio{border-color:#1a1a2e;background:#1a1a2e}
+.plan-card.selected .plan-radio::after{content:'';display:block;width:6px;height:6px;background:#fff;border-radius:50%;margin:5px auto}
+.plan-tier{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#aaa;margin-bottom:12px}
+.plan-price{font-size:42px;font-weight:700;letter-spacing:-.03em;color:#1a1a2e;line-height:1;margin-bottom:4px}
+.plan-price sup{font-size:20px;vertical-align:top;margin-top:8px;display:inline-block}
+.plan-per{font-size:13px;color:#bbb;margin-bottom:20px}
+.plan-div{height:1px;background:rgba(0,0,0,.07);margin-bottom:18px}
+.plan-feats{list-style:none}
+.plan-feats li{font-size:13px;color:#555;padding:5px 0;display:flex;align-items:flex-start;gap:10px;line-height:1.4}
+.plan-feats li::before{content:'✓';color:#34a853;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.btn-continue{background:#1a1a2e;color:#fff;padding:16px 48px;border-radius:50px;font-size:15px;font-weight:500;border:none;cursor:none;transition:all .25s;display:inline-block}
+.btn-continue:hover{background:#0d0d1a;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.step-back{font-size:13px;color:#aaa;text-decoration:none;margin-top:20px;display:inline-block}
+.step-back:hover{color:#1a1a2e}
+/* STEP 2 — ACCOUNT DETAILS */
+#step2{display:flex;min-height:100vh}
+.s2-left{background:#1a1a2e;width:380px;flex-shrink:0;padding:60px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.s2-logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:18px;font-weight:700;color:#fff}
+.s2-plan-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:24px;margin:auto 0}
+.s2-plan-tier{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px}
+.s2-plan-price{font-size:36px;font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:4px}
+.s2-plan-price sup{font-size:16px;vertical-align:top;margin-top:7px;display:inline-block}
+.s2-plan-per{font-size:13px;color:rgba(255,255,255,.35);margin-bottom:20px}
+.s2-feats{list-style:none}
+.s2-feats li{font-size:13px;color:rgba(255,255,255,.5);padding:5px 0;display:flex;gap:10px;align-items:flex-start}
+.s2-feats li::before{content:'✓';color:#34a853;flex-shrink:0;margin-top:1px}
+.s2-right{flex:1;padding:60px;display:flex;align-items:center;justify-content:center}
+.s2-form{width:100%;max-width:420px}
+.s2-form h2{font-size:28px;font-weight:700;letter-spacing:-.02em;color:#1a1a2e;margin-bottom:8px}
+.s2-form .sub{font-size:14px;color:#888;margin-bottom:36px}
+.s2-form .sub a{color:#1a73e8;text-decoration:none}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:500;color:#444;margin-bottom:7px}
+.field input{width:100%;padding:13px 16px;border:1.5px solid rgba(0,0,0,.12);border-radius:12px;font-size:15px;font-family:inherit;color:#1a1a2e;background:#fff;transition:border-color .2s,box-shadow .2s;outline:none;cursor:none}
+.field input:focus{border-color:#1a1a2e;box-shadow:0 0 0 3px rgba(26,26,46,.08)}
+.field input::placeholder{color:#bbb}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn-create{width:100%;padding:15px;background:#1a1a2e;color:#fff;border:none;border-radius:50px;font-size:15px;font-weight:500;font-family:inherit;cursor:none;transition:all .2s;margin-top:8px}
+.btn-create:hover{background:#0d0d1a;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.divider{display:flex;align-items:center;gap:16px;margin:24px 0;color:#ddd;font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(0,0,0,.08)}
+.btn-google{width:100%;padding:13px;background:#fff;color:#1a1a2e;border:1.5px solid rgba(0,0,0,.12);border-radius:50px;font-size:14px;font-weight:500;font-family:inherit;cursor:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+.btn-google:hover{border-color:rgba(0,0,0,.25);box-shadow:0 3px 12px rgba(0,0,0,.08)}
+.g-icon{width:18px;height:18px}
+.terms{font-size:12px;color:#bbb;text-align:center;margin-top:20px;line-height:1.6}
+.terms a{color:#1a73e8;text-decoration:none}
+/* STEP 3 — SUCCESS */
+#step3{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px;text-align:center}
+.success-icon{width:80px;height:80px;background:#f0fdf4;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:28px}
+#step3 h2{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.03em;color:#1a1a2e;margin-bottom:14px}
+#step3 p{font-size:17px;color:#888;max-width:420px;margin-bottom:36px}
+.s3-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn-dark{background:#1a1a2e;color:#fff;padding:14px 32px;border-radius:50px;font-size:15px;font-weight:500;text-decoration:none;transition:all .25s;cursor:none}
+.btn-dark:hover{background:#0d0d1a}
+.btn-outline{background:transparent;color:#1a1a2e;padding:13px 32px;border-radius:50px;font-size:15px;font-weight:500;text-decoration:none;border:1.5px solid rgba(0,0,0,.15);transition:all .25s;cursor:none}
+.btn-outline:hover{border-color:rgba(0,0,0,.4)}
+.s2-lr-rings{position:absolute;bottom:-60px;right:-60px;width:300px;height:300px;pointer-events:none}
+.lr-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.06);top:50%;left:50%;transform:translate(-50%,-50%)}
+.lr-ring:nth-child(1){width:100px;height:100px;border-color:rgba(255,255,255,.1)}
+.lr-ring:nth-child(2){width:180px;height:180px}
+.lr-ring:nth-child(3){width:260px;height:260px}
+.lr-ring:nth-child(4){width:300px;height:300px}
+@media(max-width:768px){
+  .plan-grid{grid-template-columns:1fr}
+  #step2{flex-direction:column}
+  .s2-left{width:100%;padding:32px 24px}
+  .s2-plan-box{margin:24px 0}
+  .s2-right{padding:32px 24px}
+  .field-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-ring"></div>
+
+<!-- STEP 1: PLAN -->
+<div class="page active" id="step1">
+  <a href="index.html" class="step-logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+  <div class="step-kicker">Get Started</div>
+  <h1 class="step-h">Choose your plan</h1>
+  <p class="step-sub">Cancel anytime. Naya content milta rehta hai.</p>
+  <div class="plan-grid">
+    <div class="plan-card" id="card-learner" onclick="selectPlan('learner')">
+      <div class="plan-radio"></div>
+      <div class="plan-tier">Learner</div>
+      <div class="plan-price"><sup>₹</sup>99</div>
+      <div class="plan-per">per month</div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li>All 6 course tracks</li>
+        <li>Full research paper library</li>
+        <li>Interactive code labs</li>
+        <li>Monthly live Q&amp;A</li>
+        <li>Discord community</li>
+        <li>Completion certificate</li>
+      </ul>
+    </div>
+    <div class="plan-card selected" id="card-pro" onclick="selectPlan('pro')">
+      <div class="plan-pop">Most Popular</div>
+      <div class="plan-radio"></div>
+      <div class="plan-tier">Pro</div>
+      <div class="plan-price"><sup>₹</sup>199</div>
+      <div class="plan-per">per month</div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li>Everything in Learner</li>
+        <li>Video lectures for every module</li>
+        <li>Recorded walkthroughs</li>
+        <li>1-on-1 office hours (2×/mo)</li>
+        <li>Early access to new content</li>
+        <li>Project feedback &amp; review</li>
+      </ul>
+    </div>
+  </div>
+  <button class="btn-continue" onclick="goStep2()">Continue →</button>
+  <a href="index.html" class="step-back">← Back to home</a>
+</div>
+
+<!-- STEP 2: ACCOUNT -->
+<div class="page" id="step2">
+  <div class="s2-left">
+    <a href="index.html" class="s2-logo"><div class="logo-icon">अ</div>AI Shiksha</a>
+    <div class="s2-plan-box">
+      <div class="s2-plan-tier" id="s2-tier">Pro Plan</div>
+      <div class="s2-plan-price" id="s2-price"><sup>₹</sup>199</div>
+      <div class="s2-plan-per">per month · cancel anytime</div>
+      <div style="height:1px;background:rgba(255,255,255,.1);margin-bottom:16px"></div>
+      <ul class="s2-feats" id="s2-feats">
+        <li>Everything in Learner</li>
+        <li>Video lectures for every module</li>
+        <li>1-on-1 office hours (2×/mo)</li>
+        <li>Project feedback &amp; review</li>
+      </ul>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.2)">© 2025 AI Shiksha</div>
+    <div class="s2-lr-rings"><div class="lr-ring"></div><div class="lr-ring"></div><div class="lr-ring"></div><div class="lr-ring"></div></div>
+  </div>
+  <div class="s2-right">
+    <div class="s2-form">
+      <h2>Create your account</h2>
+      <p class="sub">Already have one? <a href="login.html">Sign in</a></p>
+      <a href="#" class="btn-google">
+        <svg class="g-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google
+      </a>
+      <div class="divider">or use email</div>
+      <form onsubmit="goStep3();return false;">
+        <div class="field-row">
+          <div class="field"><label>First name</label><input type="text" placeholder="Arjun" autocomplete="given-name"></div>
+          <div class="field"><label>Last name</label><input type="text" placeholder="Mehta" autocomplete="family-name"></div>
+        </div>
+        <div class="field"><label>Email</label><input type="email" placeholder="you@example.com" autocomplete="email"></div>
+        <div class="field"><label>Password</label><input type="password" placeholder="Min. 8 characters" autocomplete="new-password"></div>
+        <button class="btn-create" type="submit">Create Account →</button>
+      </form>
+      <p class="terms">By creating an account you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: SUCCESS -->
+<div class="page" id="step3">
+  <div class="success-icon">🎉</div>
+  <h2>Aap taiyaar hain!</h2>
+  <p>Your account is ready. Dive into the Foundation Track or explore the full curriculum.</p>
+  <div class="s3-btns">
+    <a href="#" class="btn-dark">Go to Dashboard →</a>
+    <a href="index.html" class="btn-outline">Back to Home</a>
+  </div>
+</div>
+
+<script>
+const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
+let mx=500,my=300,rx=500,ry=300,selPlan='pro';
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.querySelectorAll('a,button,input').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+(function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
+
+function selectPlan(p){
+  selPlan=p;
+  document.getElementById('card-learner').classList.toggle('selected',p==='learner');
+  document.getElementById('card-pro').classList.toggle('selected',p==='pro');
+}
+function goStep2(){
+  document.getElementById('step1').classList.remove('active');
+  document.getElementById('step2').classList.add('active');
+  const isP=selPlan==='pro';
+  document.getElementById('s2-tier').textContent=isP?'Pro Plan':'Learner Plan';
+  document.getElementById('s2-price').innerHTML=isP?'<sup>₹</sup>199':'<sup>₹</sup>99';
+  document.getElementById('s2-feats').innerHTML=isP?
+    '<li>Everything in Learner</li><li>Video lectures for every module</li><li>1-on-1 office hours (2×/mo)</li><li>Project feedback &amp; review</li>':
+    '<li>All 6 course tracks</li><li>Full research paper library</li><li>Interactive code labs</li><li>Monthly live Q&amp;A</li>';
+}
+function goStep3(){
+  document.getElementById('step2').classList.remove('active');
+  document.getElementById('step3').classList.add('active');
+}
+</script>
+</body>
+</html>

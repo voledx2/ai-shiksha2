@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>White Papers — AI Shiksha</title>
+<title>About — AI Shiksha</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -19,87 +19,74 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:64px;padding:0 52px;d
 .nav-links{display:flex;align-items:center;gap:32px;list-style:none}
 .nav-links a{font-size:14px;color:#555;text-decoration:none;font-weight:400;transition:color .2s}
 .nav-links a:hover{color:#1a1a2e}
-.nav-links a.active{color:#1a1a2e;font-weight:600}
-.nav-cta{background:#1a1a2e!important;color:#fff!important;padding:9px 22px!important;border-radius:24px;font-weight:500!important}
+.nav-cta{background:#1a1a2e!important;color:#fff!important;padding:9px 22px!important;border-radius:24px;font-weight:500!important;transition:background .2s!important}
 .nav-cta:hover{background:#333!important}
 /* HERO */
-.page-hero{padding:120px 64px 60px;max-width:1200px;margin:0 auto}
-.kicker{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#1a73e8;margin-bottom:16px}
-.page-hero h1{font-size:clamp(40px,5.5vw,68px);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:#1a1a2e;margin-bottom:20px}
-.page-hero p{font-size:18px;color:#666;max-width:600px;line-height:1.7}
-.gbar{display:flex;height:3px}
+.about-hero{padding:140px 64px 80px;max-width:1200px;margin:0 auto}
+.about-kicker{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#1a73e8;margin-bottom:20px}
+.about-h1{font-size:clamp(42px,6vw,80px);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:#1a1a2e;max-width:700px;margin-bottom:32px}
+.about-h1 em{font-style:normal;color:rgba(0,0,0,.28)}
+.about-lead{font-size:clamp(17px,2vw,21px);color:#555;max-width:600px;line-height:1.7}
+/* GBAR */
+.gbar{display:flex;height:3px;margin:60px 0;max-width:1200px;margin-left:auto;margin-right:auto}
 .gb{flex:1}.gb:nth-child(1){background:#4285f4}.gb:nth-child(2){background:#ea4335}.gb:nth-child(3){background:#fbbc04}.gb:nth-child(4){background:#34a853}
-/* SEARCH + FILTER */
-.toolbar{padding:28px 64px;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.search-wrap{flex:1;min-width:220px;position:relative}
-.search-wrap input{width:100%;padding:10px 16px 10px 42px;border:1.5px solid rgba(0,0,0,.12);border-radius:100px;font-size:14px;font-family:inherit;color:#1a1a2e;background:#fafafa;outline:none;cursor:none;transition:border-color .2s}
-.search-wrap input:focus{border-color:#1a1a2e;background:#fff}
-.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;opacity:.4}
-.filter-btn{padding:7px 18px;border-radius:100px;font-size:13px;font-weight:500;border:1.5px solid rgba(0,0,0,.12);background:#fff;color:#666;cursor:none;transition:all .2s}
-.filter-btn:hover,.filter-btn.on{background:#1a1a2e;color:#fff;border-color:#1a1a2e}
-/* PAPERS LAYOUT */
-.papers-wrap{padding:0 64px 100px;max-width:1200px;margin:0 auto}
-.cat-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin:48px 0 20px;padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,.06)}
-.papers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.pcard{background:#fff;border:1px solid rgba(0,0,0,.09);border-radius:14px;padding:26px;transition:all .3s;cursor:none;text-decoration:none;color:inherit;display:block;position:relative}
-.pcard:hover{box-shadow:0 8px 28px rgba(0,0,0,.1);transform:translateY(-3px)}
-.pcard-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.ptag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:5px}
-.ptag-free{background:#e8f3ec;color:#34a853}
-.ptag-sub{background:#e8f0fe;color:#1a73e8}
-.ptag-pro{background:#1a1a2e;color:#fff}
-.pcat-tag{font-size:10px;font-weight:500;color:#bbb;border:1px solid rgba(0,0,0,.08);padding:3px 10px;border-radius:5px}
-.pcard h4{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:8px;color:#1a1a2e}
-.pcard p{font-size:13px;color:#888;line-height:1.65;margin-bottom:16px}
-.pcard-footer{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#ccc}
-.pcard-arrow{font-size:14px;color:#1a73e8;opacity:0;transition:opacity .2s,transform .2s;transform:translateX(-4px)}
-.pcard:hover .pcard-arrow{opacity:1;transform:translateX(0)}
-.pcard-lock{font-size:12px;color:#ccc}
-/* FEATURED */
-.featured-paper{background:linear-gradient(135deg,#f8f9fe,#fff);border:1px solid rgba(26,115,232,.2);border-radius:18px;padding:36px;margin-bottom:32px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;cursor:none;text-decoration:none;color:inherit;transition:all .3s}
-.featured-paper:hover{box-shadow:0 12px 40px rgba(26,115,232,.12);transform:translateY(-3px)}
-.fp-kicker{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a73e8;margin-bottom:10px}
-.fp-tag{display:inline-block;background:#e8f0fe;color:#1a73e8;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:5px;margin-bottom:14px}
-.featured-paper h3{font-size:clamp(20px,2.5vw,28px);font-weight:700;letter-spacing:-.02em;color:#1a1a2e;margin-bottom:12px;line-height:1.25}
-.featured-paper p{font-size:14px;color:#666;line-height:1.7;max-width:560px}
-.fp-right{text-align:center;min-width:120px}
-.fp-icon{font-size:52px;margin-bottom:8px}
-.fp-meta{font-size:12px;color:#aaa}
-/* STATS */
-.papers-stats{display:flex;gap:0;border:1px solid rgba(0,0,0,.08);border-radius:16px;overflow:hidden;margin:0 64px 0;max-width:1200px;margin-left:auto;margin-right:auto}
-.ps-item{flex:1;padding:28px 32px;text-align:center;border-right:1px solid rgba(0,0,0,.06)}
-.ps-item:last-child{border-right:none}
-.ps-n{font-size:36px;font-weight:700;letter-spacing:-.03em;color:#1a1a2e}
-.ps-l{font-size:12px;color:#aaa;margin-top:4px}
-/* CTA DARK */
-.cta-dark{background:#1a1a2e;padding:80px 64px;text-align:center;margin-top:0}
-.cta-dark h2{font-size:clamp(28px,3.8vw,48px);font-weight:700;letter-spacing:-.03em;color:#fff;margin-bottom:16px}
-.cta-dark p{font-size:16px;color:rgba(255,255,255,.45);max-width:440px;margin:0 auto 32px}
-.btn-wh{background:#fff;color:#1a1a2e;padding:15px 36px;border-radius:50px;font-size:15px;font-weight:600;text-decoration:none;display:inline-block;transition:all .25s;cursor:none}
+/* SECTION */
+.section{padding:80px 64px;max-width:1200px;margin:0 auto}
+.section-kicker{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#1a73e8;margin-bottom:14px}
+.section-h{font-size:clamp(28px,3.5vw,46px);font-weight:700;letter-spacing:-.03em;color:#1a1a2e;margin-bottom:20px;line-height:1.15}
+.section-p{font-size:16px;color:#666;line-height:1.75;max-width:640px}
+.section-p+.section-p{margin-top:14px}
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;padding:80px 64px;max-width:1200px;margin:0 auto}
+.two-col.flip{direction:rtl}.two-col.flip>*{direction:ltr}
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.07);border-radius:16px;overflow:hidden;max-width:1200px;margin:0 auto}
+.sg-item{background:#fff;padding:36px 32px;text-align:center}
+.sg-n{font-size:44px;font-weight:700;letter-spacing:-.03em;color:#1a1a2e;line-height:1}
+.sg-l{font-size:13px;color:#aaa;margin-top:8px;letter-spacing:.03em}
+/* TEAM */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.tcard{border:1px solid rgba(0,0,0,.08);border-radius:16px;padding:32px;transition:all .3s;cursor:none}
+.tcard:hover{box-shadow:0 8px 30px rgba(0,0,0,.08);transform:translateY(-3px)}
+.tcard-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#e8f0fe,#c5d8fd);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
+.tcard h3{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+.tcard-role{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#1a73e8;margin-bottom:14px}
+.tcard p{font-size:13px;color:#888;line-height:1.65}
+/* VALUES */
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+.vcard{border:1px solid rgba(0,0,0,.08);border-radius:14px;padding:28px;position:relative;overflow:hidden}
+.vcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,#1a73e8)}
+.vcard-num{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#ccc;margin-bottom:14px}
+.vcard h3{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:10px}
+.vcard p{font-size:13px;color:#888;line-height:1.65}
+/* CTA */
+.about-cta{background:#1a1a2e;padding:100px 64px;text-align:center;margin-top:80px}
+.about-cta h2{font-size:clamp(32px,4.5vw,58px);font-weight:700;letter-spacing:-.03em;color:#fff;margin-bottom:18px}
+.about-cta p{font-size:17px;color:rgba(255,255,255,.45);max-width:420px;margin:0 auto 36px}
+.btn-wh{background:#fff;color:#1a1a2e;padding:16px 38px;border-radius:50px;font-size:15px;font-weight:600;text-decoration:none;transition:all .25s;cursor:none;display:inline-block}
 .btn-wh:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,255,255,.15)}
 /* FOOTER */
 footer{background:#fff;border-top:1px solid rgba(0,0,0,.07);padding:60px 64px 32px}
-.gbar-row{display:flex;height:4px;margin-bottom:52px}
 .fg{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
-.fb p{font-size:13px;color:#999;line-height:1.7;margin-top:12px;max-width:240px}
+.fb-p{font-size:13px;color:#999;line-height:1.7;margin-top:12px;max-width:240px}
 .fc h5{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:16px}
 .fc ul{list-style:none}.fc ul li{margin-bottom:9px}
 .fc ul a{font-size:13px;color:#777;text-decoration:none;transition:color .2s}
 .fc ul a:hover{color:#1a73e8}
 .fbot{display:flex;justify-content:space-between;border-top:1px solid rgba(0,0,0,.07);padding-top:22px;font-size:12px;color:#ccc}
-.rv{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease}
+.gbar-row{display:flex;height:4px;margin-bottom:52px}
+/* REVEAL */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .rv.sh{opacity:1;transform:none}
 .rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
-@media(max-width:900px){.papers-grid{grid-template-columns:1fr 1fr}.featured-paper{grid-template-columns:1fr}.fp-right{display:none}}
 @media(max-width:768px){
   nav{padding:0 20px}.nav-links{display:none}
-  .page-hero,.toolbar,.papers-wrap{padding-left:24px;padding-right:24px}
-  .papers-grid{grid-template-columns:1fr}
-  .papers-stats{margin:0 24px;flex-wrap:wrap}
-  .ps-item{flex:0 0 50%;border-bottom:1px solid rgba(0,0,0,.06)}
+  .about-hero,.section{padding:100px 24px 48px}
+  .two-col{grid-template-columns:1fr;padding:48px 24px;gap:40px}
+  .team-grid,.values-grid{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr 1fr}
   .fg{grid-template-columns:1fr 1fr}
-  footer{padding:40px 24px 24px}
-  .cta-dark{padding:60px 24px}
+  .about-cta{padding:60px 24px}
 }
 </style>
 </head>
@@ -108,249 +95,139 @@ footer{background:#fff;border-top:1px solid rgba(0,0,0,.07);padding:60px 64px 32
 <nav>
   <a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a>
   <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
     <li><a href="courses.html">Courses</a></li>
-    <li><a href="whitepapers.html" class="active">White Papers</a></li>
     <li><a href="pricing.html">Pricing</a></li>
-    <li><a href="about.html">About</a></li>
     <li><a href="login.html">Sign in</a></li>
     <li><a href="signup.html" class="nav-cta">Shuru Karo</a></li>
   </ul>
 </nav>
 
-<div class="page-hero rv">
-  <div class="kicker">Research Library · 120+ Papers</div>
-  <h1>Papers, explained for practitioners</h1>
-  <p>We don't just drop arXiv links. Every paper gets a structured breakdown, annotated equations, key insights, and practitioner commentary. Sirf PDF nahin — samajh.</p>
+<div class="about-hero rv">
+  <div class="about-kicker">Our Story</div>
+  <h1 class="about-h1">Built for engineers who want to <em>truly</em> understand AI</h1>
+  <p class="about-lead">AI Shiksha was born from a simple frustration: every course taught you what AI does, but none explained why. We built the platform we wished existed.</p>
 </div>
 
-<div class="gbar" style="margin:0 64px"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
+<div class="gbar" style="padding:0 64px"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
 
-<div class="papers-stats rv" style="margin:32px auto;max-width:1072px">
-  <div class="ps-item"><div class="ps-n">120+</div><div class="ps-l">Papers Annotated</div></div>
-  <div class="ps-item"><div class="ps-n">18</div><div class="ps-l">Topics Covered</div></div>
-  <div class="ps-item"><div class="ps-n">12</div><div class="ps-l">Free to Read</div></div>
-  <div class="ps-item"><div class="ps-n">Weekly</div><div class="ps-l">New Papers Added</div></div>
+<div class="stat-grid">
+  <div class="sg-item rv"><div class="sg-n">4,800+</div><div class="sg-l">Active Learners</div></div>
+  <div class="sg-item rv d1"><div class="sg-n">38</div><div class="sg-l">Deep Courses</div></div>
+  <div class="sg-item rv d2"><div class="sg-n">120+</div><div class="sg-l">White Papers</div></div>
+  <div class="sg-item rv d3"><div class="sg-n">4.9★</div><div class="sg-l">Avg Rating</div></div>
 </div>
 
-<div class="toolbar">
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" placeholder="Search papers, topics, authors…" id="search-input" oninput="filterPapers()">
+<div class="two-col">
+  <div class="rv">
+    <div class="section-kicker">The Problem</div>
+    <h2 class="section-h">Most AI education is surface-level by design</h2>
+    <p class="section-p">Courses show you how to call an API. They don't show you what happens inside. You learn to use a hammer without understanding metallurgy.</p>
+    <p class="section-p">We think that's a problem — especially as AI becomes the foundational layer of all software. The engineers who understand the internals will build the future. The ones who don't will be replaced by it.</p>
   </div>
-  <button class="filter-btn on" onclick="filterCat('all',this)">All</button>
-  <button class="filter-btn" onclick="filterCat('transformers',this)">Transformers</button>
-  <button class="filter-btn" onclick="filterCat('rag',this)">RAG</button>
-  <button class="filter-btn" onclick="filterCat('agents',this)">Agents</button>
-  <button class="filter-btn" onclick="filterCat('finetuning',this)">Fine-Tuning</button>
-  <button class="filter-btn" onclick="filterCat('safety',this)">Safety</button>
-</div>
-
-<div class="papers-wrap">
-
-  <!-- FEATURED -->
-  <a href="signup.html" class="featured-paper rv">
-    <div>
-      <div class="fp-kicker">⭐ Paper of the Week</div>
-      <div class="fp-tag">Free · Transformers</div>
-      <h3>Attention Is All You Need — The Transformer Paper, Explained</h3>
-      <p>The 2017 Vaswani et al. paper that replaced RNNs. Every equation decoded — why scaled dot-product, what the encoder-decoder structure does, and the design decisions the authors never fully explained in the paper itself.</p>
+  <div class="rv d1">
+    <div style="background:#f8f9fe;border-radius:20px;padding:40px;border:1px solid rgba(0,0,0,.07)">
+      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:20px">What we cover</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.07)"><span style="font-size:20px">🧠</span><div><div style="font-size:14px;font-weight:600;color:#1a1a2e">First Principles</div><div style="font-size:12px;color:#aaa">Why before how</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.07)"><span style="font-size:20px">💻</span><div><div style="font-size:14px;font-weight:600;color:#1a1a2e">Working Code</div><div style="font-size:12px;color:#aaa">Every concept, annotated</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.07)"><span style="font-size:20px">📐</span><div><div style="font-size:14px;font-weight:600;color:#1a1a2e">The Math</div><div style="font-size:12px;color:#aaa">Equations explained, not skipped</div></div></div>
+        <div style="display:flex;align-items:center;gap:14px;padding:14px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.07)"><span style="font-size:20px">🔬</span><div><div style="font-size:14px;font-weight:600;color:#1a1a2e">Research Depth</div><div style="font-size:12px;color:#aaa">120+ papers, annotated</div></div></div>
+      </div>
     </div>
-    <div class="fp-right">
-      <div class="fp-icon">📄</div>
-      <div class="fp-meta">28 min read</div>
-    </div>
-  </a>
-
-  <!-- TRANSFORMERS -->
-  <div class="cat-label" data-cat="transformers">Transformers & Architecture</div>
-  <div class="papers-grid">
-    <a href="signup.html" class="pcard rv" data-cat="transformers" data-title="attention is all you need transformer">
-      <div class="pcard-top"><span class="ptag ptag-free">Free</span><span class="pcat-tag">Transformers</span></div>
-      <h4>Attention Is All You Need</h4>
-      <p>The foundational transformer paper — every design decision decoded with the intuition behind each architectural choice.</p>
-      <div class="pcard-footer"><span>Vaswani et al. 2017 · 28 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d1" data-cat="transformers" data-title="flash attention fast memory efficient">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">Architecture</span></div>
-      <h4>FlashAttention: Fast & Memory-Efficient Attention</h4>
-      <p>Why naive attention is memory-bound, how tiling fixes it, and why IO complexity matters more than FLOPs on GPU.</p>
-      <div class="pcard-footer"><span>Dao et al. 2022 · 22 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d2" data-cat="transformers" data-title="rotary position embedding rope">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">Positional</span></div>
-      <h4>RoPE: Rotary Position Embedding</h4>
-      <p>The geometry behind rotary embeddings — why rotation in complex space naturally encodes relative position.</p>
-      <div class="pcard-footer"><span>Su et al. 2021 · 18 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d1" data-cat="transformers" data-title="mixture of experts sparse moe">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">Architecture</span></div>
-      <h4>Switch Transformers: Sparse Mixture of Experts</h4>
-      <p>How routing works, what token dropping costs you, and why MoE beats dense models at a fixed FLOP budget.</p>
-      <div class="pcard-footer"><span>Fedus et al. 2021 · 24 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d2" data-cat="transformers" data-title="grouped query attention gqa">
-      <div class="pcard-top"><span class="ptag ptag-pro">Pro</span><span class="pcat-tag">Architecture</span></div>
-      <h4>GQA: Grouped-Query Attention</h4>
-      <p>The KV cache memory problem and how grouping keys/values by head reduces it without quality loss.</p>
-      <div class="pcard-footer"><span>Ainslie et al. 2023 · 16 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d3" data-cat="transformers" data-title="layer normalization rms norm">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">Architecture</span></div>
-      <h4>Root Mean Square Layer Normalization</h4>
-      <p>Why RMSNorm replaced LayerNorm in most modern LLMs — and what the math actually says about invariance.</p>
-      <div class="pcard-footer"><span>Zhang & Sennrich 2019 · 14 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-  </div>
-
-  <!-- RAG -->
-  <div class="cat-label" data-cat="rag">Retrieval-Augmented Generation</div>
-  <div class="papers-grid">
-    <a href="signup.html" class="pcard rv" data-cat="rag" data-title="rag retrieval augmented generation dense passage">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">RAG</span></div>
-      <h4>RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</h4>
-      <p>The original RAG paper — why parametic knowledge alone fails, and how retrieval augments generation.</p>
-      <div class="pcard-footer"><span>Lewis et al. 2020 · 26 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d1" data-cat="rag" data-title="dense passage retrieval open domain qa">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">RAG</span></div>
-      <h4>Dense Passage Retrieval for Open-Domain QA</h4>
-      <p>How bi-encoder dense retrieval works, why it beats BM25 on open-domain tasks, and training tricks.</p>
-      <div class="pcard-footer"><span>Karpukhin et al. 2020 · 20 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d2" data-cat="rag" data-title="colbert late interaction token retrieval">
-      <div class="pcard-top"><span class="ptag ptag-pro">Pro</span><span class="pcat-tag">RAG</span></div>
-      <h4>ColBERT: Efficient Late Interaction via Token-Level Encodings</h4>
-      <p>The late-interaction trick that gives you term-level matching without the full cross-encoder cost.</p>
-      <div class="pcard-footer"><span>Khattab & Zaharia 2020 · 22 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-  </div>
-
-  <!-- FINE-TUNING -->
-  <div class="cat-label" data-cat="finetuning">Fine-Tuning & Alignment</div>
-  <div class="papers-grid">
-    <a href="signup.html" class="pcard rv" data-cat="finetuning" data-title="lora low rank adaptation finetuning">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">Fine-Tuning</span></div>
-      <h4>LoRA: Low-Rank Adaptation of Large Language Models</h4>
-      <p>Why full fine-tuning is unnecessary — the rank hypothesis, adapter matrices, and why it works so well.</p>
-      <div class="pcard-footer"><span>Hu et al. 2021 · 20 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d1" data-cat="finetuning" data-title="dpo direct preference optimization rlhf">
-      <div class="pcard-top"><span class="ptag ptag-pro">Pro</span><span class="pcat-tag">Alignment</span></div>
-      <h4>DPO: Direct Preference Optimization — Your LM is Secretly a Reward Model</h4>
-      <p>The elegant reformulation that eliminates the reward model — complete derivation with every step explained.</p>
-      <div class="pcard-footer"><span>Rafailov et al. 2023 · 28 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d2" data-cat="finetuning" data-title="instruct gpt rlhf reinforcement learning human feedback">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">RLHF</span></div>
-      <h4>Training Language Models to Follow Instructions with Human Feedback</h4>
-      <p>The InstructGPT paper that made LLMs useful — reward modeling, PPO, and the alignment tax explained.</p>
-      <div class="pcard-footer"><span>Ouyang et al. 2022 · 24 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-  </div>
-
-  <!-- AGENTS -->
-  <div class="cat-label" data-cat="agents">Agents & Tool Use</div>
-  <div class="papers-grid">
-    <a href="signup.html" class="pcard rv" data-cat="agents" data-title="react reasoning acting llm agent">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">Agents</span></div>
-      <h4>ReAct: Synergizing Reasoning and Acting in Language Models</h4>
-      <p>The thought-action-observation loop that underpins most modern agents — and its failure modes.</p>
-      <div class="pcard-footer"><span>Yao et al. 2022 · 18 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d1" data-cat="agents" data-title="mcp model context protocol specification">
-      <div class="pcard-top"><span class="ptag ptag-pro">Pro</span><span class="pcat-tag">Agents</span></div>
-      <h4>The MCP Specification: A Practitioner's Guide</h4>
-      <p>Model Context Protocol from the ground up — server/client architecture, tool schemas, resource URIs.</p>
-      <div class="pcard-footer"><span>Anthropic 2024 · 32 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d2" data-cat="agents" data-title="toolformer language models tool use api">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">Tool Use</span></div>
-      <h4>Toolformer: Language Models Can Teach Themselves to Use Tools</h4>
-      <p>Self-supervised tool learning — how models learn when to call APIs without hand-labeled data.</p>
-      <div class="pcard-footer"><span>Schick et al. 2023 · 20 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-  </div>
-
-  <!-- SAFETY -->
-  <div class="cat-label" data-cat="safety">Safety & Alignment</div>
-  <div class="papers-grid">
-    <a href="signup.html" class="pcard rv" data-cat="safety" data-title="constitutional ai harmless anthropic rlaif">
-      <div class="pcard-top"><span class="ptag ptag-free">Free</span><span class="pcat-tag">Safety</span></div>
-      <h4>Constitutional AI: Harmlessness from AI Feedback</h4>
-      <p>Anthropic's CAI paper — how a set of principles replaces human labelers in the RLHF loop (RLAIF).</p>
-      <div class="pcard-footer"><span>Bai et al. 2022 · 26 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d1" data-cat="safety" data-title="superposition features mechanistic interpretability">
-      <div class="pcard-top"><span class="ptag ptag-pro">Pro</span><span class="pcat-tag">Interpretability</span></div>
-      <h4>Toy Models of Superposition</h4>
-      <p>Why features are polysemantic, what superposition means, and the implications for mechanistic interpretability.</p>
-      <div class="pcard-footer"><span>Elhage et al. 2022 · 34 min</span><span class="pcard-arrow">→</span></div>
-    </a>
-    <a href="signup.html" class="pcard rv d2" data-cat="safety" data-title="scaling laws neural language models">
-      <div class="pcard-top"><span class="ptag ptag-sub">Learner</span><span class="pcat-tag">Scaling</span></div>
-      <h4>Scaling Laws for Neural Language Models</h4>
-      <p>The Kaplan et al. paper that gave us power laws for compute, data, and parameters — and what Chinchilla corrected.</p>
-      <div class="pcard-footer"><span>Kaplan et al. 2020 · 22 min</span><span class="pcard-arrow">→</span></div>
-    </a>
   </div>
 </div>
 
-<div class="cta-dark">
-  <h2>Unlock the full library</h2>
-  <p>120+ papers, annotated with code, math and practitioner insights. New papers added every week.</p>
-  <a href="signup.html" class="btn-wh">Subscribe — ₹99/month →</a>
+<div class="section" style="background:#fafafa;max-width:100%;padding:80px 64px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="rv"><div class="section-kicker">Meet the Team</div><h2 class="section-h">Built by practitioners, for practitioners</h2></div>
+    <div class="team-grid">
+      <div class="tcard rv d1">
+        <div class="tcard-avatar">👨‍💻</div>
+        <h3>Arjun Mehta</h3>
+        <div class="tcard-role">Founder &amp; Curriculum Lead</div>
+        <p>Former ML engineer at Google Brain. Spent 6 years making sure LLMs failed gracefully in production. Now explains why they fail, clearly.</p>
+      </div>
+      <div class="tcard rv d2">
+        <div class="tcard-avatar">👩‍🔬</div>
+        <h3>Priya Nair</h3>
+        <div class="tcard-role">Research &amp; Papers</div>
+        <p>PhD in NLP from IIT Bombay. Has read — and annotated — over 400 AI papers. She makes the dense ones readable without losing the math.</p>
+      </div>
+      <div class="tcard rv d3">
+        <div class="tcard-avatar">👨‍🏫</div>
+        <h3>Rohan Das</h3>
+        <div class="tcard-role">Instructor — Agents &amp; Systems</div>
+        <p>Built production RAG and MCP systems at a Series B startup. Believes the best way to understand a system is to break it, intentionally.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="rv"><div class="section-kicker">Our Values</div><h2 class="section-h">What we believe</h2></div>
+  <div class="values-grid">
+    <div class="vcard rv d1" style="--c:#1a73e8">
+      <div class="vcard-num">01</div>
+      <h3>Depth over breadth</h3>
+      <p>One well-explained concept is worth more than ten shallow overviews. We go slow, go deep, and don't skip the hard parts.</p>
+    </div>
+    <div class="vcard rv d2" style="--c:#ea4335">
+      <div class="vcard-num">02</div>
+      <h3>Code is the truth</h3>
+      <p>Theory without implementation is incomplete. Every concept ships with working, annotated code. No hand-waving.</p>
+    </div>
+    <div class="vcard rv d3" style="--c:#34a853">
+      <div class="vcard-num">03</div>
+      <h3>Built for India</h3>
+      <p>World-class AI education shouldn't require a foreign visa or a ₹2 lakh course fee. Samajhna chahte ho? Aao.</p>
+    </div>
+    <div class="vcard rv d1" style="--c:#fbbc04">
+      <div class="vcard-num">04</div>
+      <h3>Honest pricing</h3>
+      <p>Two tiers, no tricks. If you can afford ₹99/month, you get the full curriculum. No upsells hiding the good stuff.</p>
+    </div>
+    <div class="vcard rv d2" style="--c:#9c27b0">
+      <div class="vcard-num">05</div>
+      <h3>Research-backed</h3>
+      <p>We don't cite secondary sources. Every claim traces to a paper, a benchmark, or a reproducible experiment.</p>
+    </div>
+    <div class="vcard rv d3" style="--c:#00bcd4">
+      <div class="vcard-num">06</div>
+      <h3>Community first</h3>
+      <p>Learning in isolation is slow. Our Discord isn't an afterthought — it's where some of the best discussions happen.</p>
+    </div>
+  </div>
+</div>
+
+<div class="about-cta">
+  <h2>Ready to start understanding?</h2>
+  <p>Join 4,800+ engineers who chose depth over shortcuts.</p>
+  <a href="signup.html" class="btn-wh">Start Today →</a>
 </div>
 
 <footer>
   <div class="gbar-row"><div class="gb"></div><div class="gb"></div><div class="gb"></div><div class="gb"></div></div>
   <div class="fg">
-    <div class="fb"><a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a><p>India's most rigorous AI education platform. For engineers who want to understand, not just use.</p></div>
-    <div class="fc"><h5>Learn</h5><ul><li><a href="courses.html">All Courses</a></li><li><a href="courses.html">LLM Foundations</a></li><li><a href="courses.html">RAG Systems</a></li><li><a href="courses.html">MCP &amp; Agents</a></li></ul></div>
-    <div class="fc"><h5>Resources</h5><ul><li><a href="whitepapers.html">White Papers</a></li><li><a href="glossary.html">Glossary</a></li><li><a href="blog.html">Blog</a></li><li><a href="blog.html">Newsletter</a></li></ul></div>
-    <div class="fc"><h5>Company</h5><ul><li><a href="about.html">About</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div><a href="index.html" class="logo"><div class="logo-icon">अ</div>AI Shiksha</a><p class="fb-p">India's most rigorous AI education platform. For engineers who want to understand, not just use.</p></div>
+    <div class="fc"><h5>Learn</h5><ul><li><a href="#">LLM Foundations</a></li><li><a href="#">RAG Systems</a></li><li><a href="#">MCP &amp; Agents</a></li><li><a href="#">Fine-Tuning</a></li></ul></div>
+    <div class="fc"><h5>Resources</h5><ul><li><a href="#">White Papers</a></li><li><a href="#">Code Labs</a></li><li><a href="#">Blog</a></li><li><a href="#">Newsletter</a></li></ul></div>
+    <div class="fc"><h5>Company</h5><ul><li><a href="about.html">About</a></li><li><a href="#">Instructors</a></li><li><a href="#">Privacy</a></li><li><a href="#">Contact</a></li></ul></div>
   </div>
   <div class="fbot"><span>© 2025 AI Shiksha · All rights reserved</span><span>Made with ❤️ in India</span></div>
 </footer>
 
 <script>
 const curEl=document.getElementById('cur'),ringEl=document.getElementById('cur-ring');
-let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+let mx=500,my=300,rx=500,ry=300;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
 document.querySelectorAll('a,button').forEach(el=>{
   el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
   el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
 });
 (function loop(){curEl.style.left=mx+'px';curEl.style.top=my+'px';rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ringEl.style.left=rx+'px';ringEl.style.top=ry+'px';requestAnimationFrame(loop);})();
-
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('sh');});},{threshold:.1});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('sh');});},{threshold:.15});
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
-
-let activeCat='all';
-function filterCat(cat,btn){
-  activeCat=cat;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  applyFilters();
-}
-function filterPapers(){applyFilters();}
-function applyFilters(){
-  const q=document.getElementById('search-input').value.toLowerCase();
-  document.querySelectorAll('.pcard').forEach(el=>{
-    const matchCat=activeCat==='all'||el.dataset.cat===activeCat;
-    const matchQ=!q||el.dataset.title.includes(q)||el.textContent.toLowerCase().includes(q);
-    el.style.display=(matchCat&&matchQ)?'':'none';
-  });
-  document.querySelectorAll('.cat-label').forEach(el=>{
-    const cat=el.dataset.cat;
-    if(!cat){return;}
-    const grid=el.nextElementSibling;
-    const any=grid&&[...grid.querySelectorAll('.pcard')].some(c=>c.style.display!=='none');
-    el.style.display=any?'':'none';
-    if(grid)grid.style.display=any?'':'none';
-  });
-}
-window.filterCat=filterCat;
-window.filterPapers=filterPapers;
 </script>
 </body>
 </html>
